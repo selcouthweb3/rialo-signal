@@ -1,0 +1,27 @@
+/*
+  APP LAYOUT
+  The shell that wraps the entire application.
+  Uses CSS Grid to create a fixed topbar + scrollable content area.
+*/
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;   /* Stack topbar on top of content */
+  background: var(--bg-base);
+}
+
+.app-main {
+  flex: 1;                  /* Takes all remaining height after topbar */
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;           /* Centers the content */
+  padding: 20px 16px 40px;
+}
+
+/* Responsive — on small screens, reduce padding */
+@media (max-width: 640px) {
+  .app-main {
+    padding: 12px 12px 32px;
+  }
+}

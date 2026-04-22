@@ -1,0 +1,168 @@
+/*
+  GLOBAL STYLES — Rialo Signal
+  ==============================
+  These CSS variables (--variable-name) are the design tokens.
+  They define colors, fonts, and spacing used everywhere.
+  Change one variable here and it updates across the entire app.
+  
+  This is the dark terminal aesthetic — inspired by Bloomberg Terminal
+  and professional trading interfaces.
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap');
+
+:root {
+  /* Background layers — from darkest to lightest */
+  --bg-base:    #0a0c0f;   /* Main page background */
+  --bg-surface: #111318;   /* Slightly lighter — section backgrounds */
+  --bg-card:    #161a22;   /* Cards and panels */
+  --bg-hover:   #1d2230;   /* Hover states */
+
+  /* Borders */
+  --border:       rgba(255, 255, 255, 0.07);
+  --border-hover: rgba(255, 255, 255, 0.15);
+
+  /* Brand colors */
+  --accent:   #00e5b4;   /* Rialo green — primary accent */
+  --accent2:  #7B6EF6;   /* Purple — SDK/Rialo features */
+  --warn:     #f59e0b;   /* Amber — warnings */
+  --danger:   #ef4444;   /* Red — critical alerts */
+  --info:     #38bdf8;   /* Blue — informational */
+
+  /* Text */
+  --text-primary:   rgba(255, 255, 255, 0.88);
+  --text-secondary: rgba(255, 255, 255, 0.55);
+  --text-muted:     rgba(255, 255, 255, 0.30);
+
+  /* Typography */
+  --font-display: 'Syne', sans-serif;       /* Headings, numbers, brand */
+  --font-mono:    'DM Mono', monospace;     /* Data, labels, code */
+
+  /* Spacing scale */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
+
+  /* Border radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+}
+
+/* Reset — removes browser default margins/padding */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  /* Prevents horizontal scrollbar on mobile */
+  overflow-x: hidden;
+}
+
+/* 
+  Scrollbar styling — makes the browser scrollbar
+  match the dark terminal aesthetic.
+*/
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-base); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+/* Base link style */
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Utility classes used across components */
+.up     { color: var(--accent); }
+.down   { color: var(--danger); }
+.warn   { color: var(--warn); }
+.info   { color: var(--info); }
+.muted  { color: var(--text-muted); }
+
+/* Pill badges */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-family: var(--font-mono);
+}
+.pill-live {
+  background: rgba(0, 229, 180, 0.1);
+  color: var(--accent);
+  border: 0.5px solid rgba(0, 229, 180, 0.3);
+}
+.pill-sdk {
+  background: rgba(123, 110, 246, 0.1);
+  color: var(--accent2);
+  border: 0.5px solid rgba(123, 110, 246, 0.3);
+}
+.pill-warn {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--warn);
+  border: 0.5px solid rgba(245, 158, 11, 0.3);
+}
+.pill-danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+  border: 0.5px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Pulsing dot for live indicators */
+.dot-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulse-anim 1.8s ease-in-out infinite;
+}
+@keyframes pulse-anim {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.2; }
+}
+
+/* SDK note boxes */
+.sdk-note {
+  font-size: 11px;
+  color: var(--accent2);
+  border: 0.5px solid rgba(123, 110, 246, 0.25);
+  background: rgba(123, 110, 246, 0.06);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  line-height: 1.5;
+}
+
+/* Section separator */
+.section-sep {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 20px 0 12px;
+}
+.section-sep::after {
+  content: '';
+  flex: 1;
+  height: 0.5px;
+  background: var(--border);
+}

@@ -1,0 +1,42 @@
+.wa-search { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.wa-input { flex: 1; min-width: 260px; background: rgba(255,255,255,0.04); border: 0.5px solid rgba(255,255,255,0.07); border-radius: 8px; color: rgba(255,255,255,0.88); font-family: 'DM Mono',monospace; font-size: 12px; padding: 10px 14px; outline: none; transition: border-color 0.15s; }
+.wa-input:focus { border-color: rgba(0,229,180,0.4); }
+.wa-input::placeholder { color: rgba(255,255,255,0.25); }
+.wa-btn { background: rgba(0,229,180,0.1); border: 0.5px solid rgba(0,229,180,0.4); color: #00e5b4; font-family: 'DM Mono',monospace; font-size: 11px; padding: 10px 18px; border-radius: 8px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.08em; }
+.wa-btn:hover { background: rgba(0,229,180,0.18); }
+.wa-sample-btn { background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.07); color: rgba(255,255,255,0.40); font-family: 'DM Mono',monospace; font-size: 10px; padding: 6px 10px; border-radius: 6px; cursor: pointer; }
+.wa-sample-btn:hover { border-color: rgba(0,229,180,0.3); color: #00e5b4; }
+.wa-profile { background: #161a22; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 16px; margin-bottom: 14px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.wa-avatar { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Syne',sans-serif; font-size: 16px; font-weight: 700; flex-shrink: 0; }
+.wa-profile-info { flex: 1; min-width: 160px; }
+.wa-address { font-family: 'DM Mono',monospace; font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+.wa-type { font-size: 11px; color: rgba(255,255,255,0.45); }
+.wa-behaviour-score { text-align: right; }
+.wa-bscore-val { font-family: 'Syne',sans-serif; font-size: 22px; font-weight: 700; }
+.wa-bscore-lbl { font-size: 10px; color: rgba(255,255,255,0.35); }
+.wa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+@media (max-width: 700px) { .wa-grid { grid-template-columns: 1fr; } }
+.wa-card { background: #161a22; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 14px 16px; }
+.wa-card-title { font-size: 10px; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+.holding-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 0.5px solid rgba(255,255,255,0.05); font-size: 12px; }
+.holding-row:last-child { border-bottom: none; }
+.holding-sym { font-weight: 500; width: 44px; }
+.holding-val { flex: 1; color: rgba(255,255,255,0.6); }
+.holding-chg { text-align: right; font-size: 11px; }
+.act-row { display: flex; align-items: center; gap: 8px; padding: 6px 8px; background: rgba(255,255,255,0.02); border-radius: 5px; margin-bottom: 5px; font-size: 11px; }
+.act-badge { font-size: 9px; padding: 2px 6px; border-radius: 3px; text-align: center; flex-shrink: 0; width: 46px; }
+.act-BUY      { background: rgba(0,229,180,0.12);  color: #00e5b4; }
+.act-SELL     { background: rgba(239,68,68,0.12);   color: #ef4444; }
+.act-SWAP     { background: rgba(245,158,11,0.12);  color: #f59e0b; }
+.act-TRANSFER { background: rgba(56,189,248,0.12);  color: #38bdf8; }
+.act-desc { flex: 1; color: rgba(255,255,255,0.70); }
+.act-val  { color: #00e5b4; white-space: nowrap; }
+.act-time { color: rgba(255,255,255,0.30); white-space: nowrap; }
+.pred-row { padding: 9px 12px; background: rgba(123,110,246,0.06); border: 0.5px solid rgba(123,110,246,0.2); border-radius: 6px; margin-bottom: 8px; font-size: 11px; }
+.pred-condition { color: rgba(255,255,255,0.75); margin-bottom: 4px; }
+.pred-action { color: #7B6EF6; font-size: 10px; }
+.exposure-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 11px; }
+.exp-label { width: 110px; color: rgba(255,255,255,0.45); flex-shrink: 0; }
+.exp-track { flex: 1; height: 5px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+.exp-fill  { height: 100%; border-radius: 3px; }
+.exp-val   { font-family: 'Syne',sans-serif; font-size: 12px; font-weight: 600; width: 36px; text-align: right; }
