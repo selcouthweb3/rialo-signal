@@ -20,3 +20,12 @@ async def get_all_prices():
     crypto = await fetch_crypto_prices(["BTC", "ETH", "SOL", "BNB", "AVAX", "LINK"])
     rwa = get_rwa_prices()
     return {"crypto": crypto, "rwa": rwa}
+
+@router.get("/debug")
+async def debug_prices():
+    import os
+    key = os.getenv("COINGECKO_API_KEY", "NOT SET")
+    return {
+        "coingecko_key_set": key != "NOT SET",
+        "key_preview": key[:8] + "..." if key != "NOT SET" else "NOT SET"
+    }
