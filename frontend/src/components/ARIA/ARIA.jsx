@@ -16,23 +16,19 @@ const WELCOME = {
 }
 
 export default function ARIA({ wallet = '' }) {
-  const [open, setOpen]       = useState(false)
+  const [open, setOpen]         = useState(false)
   const [messages, setMessages] = useState([WELCOME])
-  const [input, setInput]     = useState('')
-  const [loading, setLoading] = useState(false)
+  const [input, setInput]       = useState('')
+  const [loading, setLoading]   = useState(false)
   const bottomRef = useRef(null)
   const inputRef  = useRef(null)
 
   useEffect(() => {
-    if (bottomRef.current) {
-      bottomRef.current.scrollIntoView({ behavior: 'smooth' })
-    }
+    if (bottomRef.current) bottomRef.current.scrollIntoView({ behavior: 'smooth' })
   }, [messages, loading])
 
   useEffect(() => {
-    if (open && inputRef.current) {
-      setTimeout(() => inputRef.current?.focus(), 100)
-    }
+    if (open && inputRef.current) setTimeout(() => inputRef.current?.focus(), 100)
   }, [open])
 
   async function sendMessage(text) {
@@ -41,7 +37,6 @@ export default function ARIA({ wallet = '' }) {
     setInput('')
     setMessages(prev => [...prev, { role: 'user', text: msg }])
     setLoading(true)
-
     try {
       const apiBase = import.meta.env.VITE_API_URL || '/api'
       const resp = await fetch(`${apiBase}/chat/`, {
@@ -59,16 +54,24 @@ export default function ARIA({ wallet = '' }) {
   }
 
   function handleKey(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      sendMessage()
-    }
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage() }
   }
 
   return (
     <>
-      <button className="aria-toggle" onClick={() => setOpen(o => !o)} title="Ask ARIA">
-        {open ? '✕' : '◆'}
+      <button
+        className="aria-toggle"
+        onClick={() => setOpen(o => !o)}
+        style={{ position: 'fixed', bottom: '24px', right: '24px' }}
+      >
+        {!open && <span className="aria-notif-dot"></span>}
+        <span className="aria-toggle-icon">{open ? '✕' : '◆'}</span>
+        {!open && (
+          <div className="aria-toggle-text">
+            <span className="aria-toggle-label">Ask ARIA</span>
+            <span className="aria-toggle-sub">AI Assistant</span>
+          </div>
+        )}
       </button>
 
       {open && (
@@ -78,7 +81,7 @@ export default function ARIA({ wallet = '' }) {
             <div className="aria-header-info">
               <div className="aria-name">ARIA</div>
               <div className="aria-status">
-                <span className="dot-pulse" style={{width:'5px',height:'5px',borderRadius:'50%',background:'#00e5b4',animation:'pulse-anim 1.8s ease-in-out infinite'}}></span>
+                <span style={{width:'5px',height:'5px',borderRadius:'50%',background:'#00e5b4',display:'inline-block',animation:'pulse-anim 1.8s ease-in-out infinite'}}></span>
                 Rialo Signal Intelligence
               </div>
             </div>
@@ -114,9 +117,7 @@ export default function ARIA({ wallet = '' }) {
           {messages.length <= 1 && (
             <div className="aria-suggestions">
               {SUGGESTIONS.map(s => (
-                <button key={s} className="aria-suggest-btn" onClick={() => sendMessage(s)}>
-                  {s}
-                </button>
+                <button key={s} className="aria-suggest-btn" onClick={() => sendMessage(s)}>{s}</button>
               ))}
             </div>
           )}
@@ -131,9 +132,7 @@ export default function ARIA({ wallet = '' }) {
               placeholder="Ask ARIA anything..."
               rows={1}
             />
-            <button className="aria-send" onClick={() => sendMessage()} disabled={loading || !input.trim()}>
-              ➤
-            </button>
+            <button className="aria-send" onClick={() => sendMessage()} disabled={loading || !input.trim()}>➤</button>
           </div>
         </div>
       )}
