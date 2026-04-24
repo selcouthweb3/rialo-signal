@@ -225,3 +225,28 @@
   .aria-panel { width: calc(100vw - 32px); right: 16px; bottom: 80px; }
   .aria-toggle { right: 16px; bottom: 16px; }
 }
+
+.aria-toggle-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+}
+.aria-toggle-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: #0a0c0f;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  display: block;
+}
+.aria-toggle-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: rgba(0,0,0,0.55);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: block;
+  line-height: 1;
+}
