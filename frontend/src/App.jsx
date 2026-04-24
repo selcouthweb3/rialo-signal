@@ -5,6 +5,7 @@ import TokenIntel from './components/TokenIntel/TokenIntel'
 import ClusterMap from './components/ClusterMap/ClusterMap'
 import WalletAnalysis from './components/WalletAnalysis/WalletAnalysis'
 import './styles/app.css'
+import ARIA from './components/ARIA/ARIA'
 
 /*
   APP.JSX — The Root Component
@@ -63,6 +64,7 @@ export default function App() {
         {activeTab === 'cluster' && <ClusterMap />}
         {activeTab === 'wallet'  && <WalletAnalysis />}
       </main>
+          <ARIA />
     </div>
   )
 }
