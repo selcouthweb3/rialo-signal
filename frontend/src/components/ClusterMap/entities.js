@@ -275,31 +275,33 @@ function _seededInt(seed) {
   return (h ^ (h >>> 16)) >>> 0
 }
 
-function _syntheticAddr(i) {
-  const hex = '0123456789ABCDEF'
+// Generates a full 40-hex-char address: 0x + 40 chars = 42 chars total
+function _syntheticFullAddr(i) {
+  const hex = '0123456789abcdef'
   let s = _seededInt(i * 7919 + 1)
-  let prefix = '0x'
-  for (let j = 0; j < 6; j++) {
-    s = _seededInt(s + j)
-    prefix += hex[s % 16]
+  let addr = '0x'
+  for (let j = 0; j < 40; j++) {
+    s = _seededInt(s + j + 1)
+    addr += hex[s % 16]
   }
-  let suffix = ''
-  for (let j = 0; j < 4; j++) {
-    s = _seededInt(s + j + 100)
-    suffix += hex[s % 16]
-  }
-  return `${prefix}...${suffix}`
+  return addr
+}
+
+// Truncated display form: 0xXXXX...XXXX (matches shortAddress convention)
+function _truncAddr(full) {
+  return `${full.slice(0, 6)}...${full.slice(-4)}`
 }
 
 export const RETAIL_ENTITIES = Array.from({ length: 40 }, (_, i) => {
-  const s1 = _seededInt(i * 1021 + 3)
-  const s2 = _seededInt(i * 1021 + 7)
+  const s1    = _seededInt(i * 1021 + 3)
+  const s2    = _seededInt(i * 1021 + 7)
+  const full  = _syntheticFullAddr(i)
   const netWorth = 5_000 + (s1 % 495_000)
-  const riskIdx = s2 % 3
+  const riskIdx  = s2 % 3
   return {
-    id: `retail_${i}`,
-    label: `Wallet ${String(i + 1).padStart(3, '0')}`,
-    address: _syntheticAddr(i),
+    id:       `retail_${i}`,
+    label:    _truncAddr(full),   // shown on cluster node and in drawer header
+    address:  full,               // full address shown in drawer address field
     netWorth,
     category: 'retail',
     risk: riskIdx === 0 ? 'high' : riskIdx === 1 ? 'medium' : 'low',
