@@ -1,47 +1,75 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import * as d3 from 'd3'
 import './ClusterMap.css'
+import EntityDrawer from './EntityDrawer'
+import {
+  CEX_ENTITIES,
+  WHALE_ENTITIES,
+  ALPHA_ENTITIES,
+  FUND_ENTITIES,
+  RETAIL_ENTITIES,
+} from './entities'
+import { formatPrice } from '../../utils/format'
 
-function seed(str) {
-  let h = 0
-  for (let i = 0; i < str.length; i++) h = (Math.imul(31, h) + str.charCodeAt(i)) | 0
-  return ((h >>> 0) % 10000) / 10000
+const CATEGORY_COLORS = {
+  cex:    '#A78BFA',
+  whale:  '#22D3EE',
+  alpha:  '#FBBF24',
+  fund:   '#34D399',
+  retail: '#52525B',
 }
 
-function genWhaleNodes() {
-  const types = [
-    { type: 'mega_whale', label: 'Mega Whale',  count: 4,  sizeRange: [42,58], color: '#F87171' },
-    { type: 'exchange',   label: 'Exchange',     count: 5,  sizeRange: [32,46], color: '#FBBF24' },
-    { type: 'smart',      label: 'Smart Money',  count: 7,  sizeRange: [22,34], color: '#A78BFA' },
-    { type: 'vc',         label: 'VC / Fund',    count: 5,  sizeRange: [28,42], color: '#38bdf8' },
-    { type: 'retail',     label: 'Retail',       count: 12, sizeRange: [22,32], color: '#34D399' },
+const CATEGORY_LABELS = {
+  cex:    'CEX',
+  whale:  'Whale',
+  alpha:  'Alpha Trader',
+  fund:   'VC / Fund',
+  retail: 'Retail',
+}
+
+const LOG_MIN = Math.log(5_000)
+const LOG_MAX = Math.log(8_400_000_000)
+function netWorthToRadius(nw) {
+  const t = (Math.log(Math.max(nw, 5_000)) - LOG_MIN) / (LOG_MAX - LOG_MIN)
+  return 8 + t * 48
+}
+
+function genEntityNodes() {
+  const all = [
+    ...CEX_ENTITIES,
+    ...WHALE_ENTITIES,
+    ...ALPHA_ENTITIES,
+    ...FUND_ENTITIES,
+    ...RETAIL_ENTITIES,
   ]
-  const nodes = []
-  types.forEach(t => {
-    for (let i = 0; i < t.count; i++) {
-      const id = `${t.type}_${i}`
-      const s  = seed(id)
-      const r  = t.sizeRange[0] + s * (t.sizeRange[1] - t.sizeRange[0])
-      nodes.push({
-        id, type: t.type, label: t.label, color: t.color, r,
-        name: t.type === 'mega_whale' ? `Whale ${i+1}` :
-              t.type === 'exchange'   ? `CEX ${i+1}` :
-              t.type === 'smart'      ? `Alpha ${i+1}` :
-              t.type === 'vc'         ? `Fund ${i+1}` : `Wallet ${i+1}`,
-        pct: (r/380*100).toFixed(1)+'%',
-        holding: '$'+(r*6.5+10).toFixed(1)+'M',
-        txCount: Math.floor(s*2400+20),
-        lastMove: Math.floor(s*48+1)+'h ago'
-      })
-    }
-  })
-  const megas  = nodes.filter(n => n.type === 'mega_whale')
-  const smarts = nodes.filter(n => n.type === 'smart')
-  const links  = []
-  megas.forEach(m => smarts.slice(0,3).forEach(s => links.push({ source: m.id, target: s.id, strength: 0.4 })))
-  smarts.slice(0,4).forEach((s,i) => {
-    if (smarts[i+1]) links.push({ source: s.id, target: smarts[i+1].id, strength: 0.25 })
-  })
+  const nodes = all.map(e => ({
+    id:      e.id,
+    type:    e.category,
+    label:   CATEGORY_LABELS[e.category] || e.category,
+    color:   CATEGORY_COLORS[e.category] || '#888',
+    r:       netWorthToRadius(e.netWorth),
+    name:    e.label,
+    pct:     formatPrice(e.netWorth),
+    holding: e.notes || CATEGORY_LABELS[e.category] || '',
+    txCount: null,
+    lastMove: 'On-chain',
+    _entity: e,
+  }))
+
+  const links = [
+    { source: 'cex_binance14', target: 'cex_coinbase',  strength: 0.38 },
+    { source: 'cex_binance14', target: 'cex_bybit',     strength: 0.30 },
+    { source: 'cex_coinbase',  target: 'fund_paradigm', strength: 0.28 },
+    { source: 'cex_coinbase',  target: 'fund_a16z',     strength: 0.28 },
+    { source: 'whale_gcr',     target: 'whale_light',   strength: 0.32 },
+    { source: 'whale_gcr',     target: 'alpha_hsaka',   strength: 0.25 },
+    { source: 'whale_light',   target: 'alpha_pentoshi', strength: 0.20 },
+    { source: 'fund_paradigm', target: 'fund_polychain', strength: 0.22 },
+    { source: 'fund_a16z',     target: 'fund_multicoin', strength: 0.18 },
+    { source: 'alpha_hsaka',   target: 'alpha_inversebrah', strength: 0.30 },
+    { source: 'whale_cobie',   target: 'alpha_traderjoe',   strength: 0.22 },
+  ]
+
   return { nodes, links }
 }
 
@@ -97,15 +125,15 @@ function genFlowNodes() {
 
 const VIEWS = {
   whale: {
-    label:'Whale wallet clusters', gen:genWhaleNodes,
-    stats:['247','18.4%','22.1%','0 bots'],
-    statLbl:['Wallets tracked','Whale concentration','Smart money','Bots required'],
+    label:'On-chain entity cluster map', gen:genEntityNodes,
+    stats:['68','10 CEX','14 Funds/Whales','0 bots'],
+    statLbl:['Entities tracked','Exchange wallets','Smart money','Bots required'],
     legend:[
-      {color:'#F87171',label:'Mega whale'},
-      {color:'#FBBF24',label:'Exchange'},
-      {color:'#A78BFA',label:'Smart money'},
-      {color:'#38bdf8',label:'VC / Fund'},
-      {color:'#34D399',label:'Retail'},
+      {color:'#A78BFA',label:'CEX'},
+      {color:'#22D3EE',label:'Whale'},
+      {color:'#FBBF24',label:'Alpha Trader'},
+      {color:'#34D399',label:'VC / Fund'},
+      {color:'#52525B',label:'Retail'},
     ],
   },
   signal: {
@@ -130,11 +158,16 @@ const VIEWS = {
 }
 
 export default function ClusterMap() {
-  const [activeView, setActiveView] = useState('whale')
-  const svgRef     = useRef(null)
-  const simRef     = useRef(null)
-  const frameRef   = useRef(null)
-  const tooltipRef = useRef(null)
+  const [activeView, setActiveView]       = useState('whale')
+  const [selectedEntity, setSelectedEntity] = useState(null)
+  const svgRef        = useRef(null)
+  const simRef        = useRef(null)
+  const frameRef      = useRef(null)
+  const tooltipRef    = useRef(null)
+  const onNodeClickRef = useRef(null)
+
+  // Keep click handler ref in sync each render without re-creating draw
+  onNodeClickRef.current = (entity) => setSelectedEntity(entity || null)
 
   const draw = useCallback((viewKey) => {
     if (simRef.current)   simRef.current.stop()
@@ -207,6 +240,10 @@ export default function ClusterMap() {
       .attr('font-family','DM Mono,monospace')
       .attr('pointer-events','none')
 
+    nodeSel.on('click', (event, d) => {
+      if (onNodeClickRef.current) onNodeClickRef.current(d._entity || null)
+    })
+
     const tt = tooltipRef.current
     nodeSel
       .on('mouseover',(event,d) => {
@@ -238,17 +275,17 @@ export default function ClusterMap() {
       forceY = d3.forceY(cy).strength(0.05)
     } else {
       forceX = d3.forceX(d => {
-        if (d.type==='mega_whale') return cx - 280
-        if (d.type==='smart')      return cx - 80
-        if (d.type==='exchange')   return cx + 280
-        if (d.type==='vc')         return cx + 80
+        if (d.type==='whale') return cx - 280
+        if (d.type==='alpha') return cx - 80
+        if (d.type==='cex')   return cx + 280
+        if (d.type==='fund')  return cx + 80
         return cx + 180
       }).strength(0.18)
       forceY = d3.forceY(d => {
-        if (d.type==='mega_whale') return cy - 120
-        if (d.type==='smart')      return cy - 60
-        if (d.type==='exchange')   return cy - 100
-        if (d.type==='vc')         return cy + 120
+        if (d.type==='whale') return cy - 120
+        if (d.type==='alpha') return cy - 60
+        if (d.type==='cex')   return cy - 100
+        if (d.type==='fund')  return cy + 120
         return cy + 140
       }).strength(0.18)
     }
@@ -344,13 +381,20 @@ export default function ClusterMap() {
               {l.label}
             </div>
           ))}
-          <div className="cm-leg-item" style={{marginLeft:'auto'}}>Size = holding · Hover · Drag</div>
+          <div className="cm-leg-item" style={{marginLeft:'auto'}}>Size = net worth · Click for details · Drag</div>
         </div>
       </div>
 
       <div className="sdk-note">
         On mainnet: Rialo Read Path delivers wallet state from validators. No indexer, no API key.
       </div>
+
+      {selectedEntity && (
+        <EntityDrawer
+          entity={selectedEntity}
+          onClose={() => setSelectedEntity(null)}
+        />
+      )}
     </div>
   )
 }
