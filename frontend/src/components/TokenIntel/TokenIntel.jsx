@@ -9,30 +9,37 @@ const AI_CONTENT = {
   BTC: [
     { mode: 'Explain this token', text: 'Bitcoin is the original proof-of-work blockchain and largest crypto asset by market cap. Fixed 21M supply cap makes it digital gold. On Rialo, BTC price data flows natively onchain via Rialo Stream — no oracle contract, no middleware, just a one-liner in your smart contract.' },
     { mode: 'Why is this pumping?', text: 'BTC is moving on a short liquidation cascade — over $890M in shorts force-closed in 4 hours. Smart money wallets added a net $142M in 24h. On Rialo, a reactive predicate would have already fired a rebalancing TX automatically — no bot, no keeper.' },
-    { mode: 'Summarize onchain activity', text: 'Exchange inflows are dropping while accumulation wallets are filling — historically bullish. Real liquidity ($1.84B) is 42% below reported ($3.2B). Rialo Read Path delivers this state directly from validators — no indexer, no $3k/month overhead.' },
+    { mode: 'Onchain activity', text: 'Exchange inflows are dropping while accumulation wallets are filling — historically bullish. Real liquidity ($1.84B) is 42% below reported ($3.2B). Rialo Read Path delivers this state directly from validators — no indexer, no $3k/month overhead.' },
   ],
   ETH: [
     { mode: 'Explain this token', text: 'Ethereum is the largest smart contract platform. Proof-of-stake since 2022 makes it a yield-bearing asset. SVM-compatible with Rialo VM — your contracts can migrate to Rialo and immediately gain reactive execution and gasless transactions via Stake-for-Service.' },
     { mode: 'Why is this pumping?', text: 'ETH is moving on institutional rotation — smart money shifted from BTC after a staking yield uptick. Real liquidity at $920M is 49% below reported, partly due to wash trading on offshore venues.' },
-    { mode: 'Summarize onchain activity', text: 'Net DEX inflow with Uniswap v3 pool depth increasing. A known smart money wallet historically front-runs major moves by 12-18h — it entered 6h ago. Rialo IPC enables private tracking without exposing your strategy onchain.' },
+    { mode: 'Onchain activity', text: 'Net DEX inflow with Uniswap v3 pool depth increasing. A known smart money wallet historically front-runs major moves by 12-18h — it entered 6h ago. Rialo IPC enables private tracking without exposing your strategy onchain.' },
   ],
   SOL: [
     { mode: 'Explain this token', text: 'Solana is a high-throughput L1 with parallel transaction execution. SVM-compatible — Rialo VM also supports SVM, meaning Solana contracts deploy to Rialo immediately and gain reactive transactions and native Web2 API calls.' },
     { mode: 'Why is this pumping?', text: 'SOL up 3.2% on strong NFT activity and memecoin season. Real liquidity gap is large — reported $890M but real orderbook depth is $340M, a 62% inflation from bot-driven wash trading.' },
-    { mode: 'Summarize onchain activity', text: 'SOL distribution is more concentrated than BTC/ETH — top 10 wallets hold 24%. Two are VC unlock wallets with linear vesting. On Rialo, set a predicate: if vesting wallet moves funds, auto-hedge immediately inside consensus.' },
+    { mode: 'Onchain activity', text: 'SOL distribution is more concentrated than BTC/ETH — top 10 wallets hold 24%. Two are VC unlock wallets with linear vesting. On Rialo, set a predicate: if vesting wallet moves funds, auto-hedge immediately inside consensus.' },
   ],
   RLO: [
     { mode: 'Explain this token', text: 'RLO is the native Rialo protocol token. It powers Stake-for-Service — staking yield auto-converts to service credits for gas, reactive TX fees, and storage. No manual top-ups. A genuine self-sustaining flywheel.' },
     { mode: 'Why is this pumping?', text: 'RLO is pre-launch — mainnet 2026. The tokenomics are architecturally significant. RLO is not just a fee token — it is a consumable budget for network services. Stakers earn yield AND that yield funds their onchain activity.' },
-    { mode: 'Summarize onchain activity', text: 'The most powerful RLO use case for Rialo Signal is Stake-for-Service: stake RLO, route yield to cover every reactive predicate check and Rialo Edge API call. Your analytics platform runs forever — self-funded from its own staking position.' },
+    { mode: 'Onchain activity', text: 'The most powerful RLO use case for Rialo Signal is Stake-for-Service: stake RLO, route yield to cover every reactive predicate check and Rialo Edge API call. Your analytics platform runs forever — self-funded from its own staking position.' },
   ],
 }
 
 const DEFAULT_AI = [
   { mode: 'Explain this token', text: 'Analyzing token against live onchain data. Rialo Signal cross-references real liquidity, whale positions, and smart money flows to give you a complete picture.' },
   { mode: 'Why is this pumping?', text: 'Scanning pump signal drivers: whale accumulation, short liquidations, exchange inflow, social sentiment, and smart money positioning.' },
-  { mode: 'Summarize onchain activity', text: 'Summarizing recent transactions, liquidity changes, and distribution shifts. Rialo Read Path would deliver this state from validators in real time.' },
+  { mode: 'Onchain activity', text: 'Summarizing recent transactions, liquidity changes, and distribution shifts. Rialo Read Path would deliver this state from validators in real time.' },
 ]
+
+function directionClass(direction) {
+  if (direction === 'bullish')  return 'bullish'
+  if (direction === 'bearish')  return 'bearish'
+  if (direction === 'catalyst') return 'catalyst'
+  return 'neutral'
+}
 
 export default function TokenIntel() {
   const [inputVal, setInputVal] = useState('')
@@ -88,104 +95,166 @@ export default function TokenIntel() {
 
   return (
     <div>
+      {/* Search */}
       <div className="ti-search">
-        <input className="ti-input" value={inputVal} onChange={e => setInputVal(e.target.value)}
+        <input
+          className="ti-input"
+          value={inputVal}
+          onChange={e => setInputVal(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && handleAnalyze()}
-          placeholder="Token name, symbol, or contract address..." />
+          placeholder="Token name, symbol, or contract address..."
+        />
         {QUICK_TOKENS.map(sym => (
-          <button key={sym} className={`quick-btn ${activeQuick === sym ? 'active' : ''}`} onClick={() => handleQuickToken(sym)}>{sym}</button>
+          <button
+            key={sym}
+            className={`quick-btn ${activeQuick === sym ? 'active' : ''}`}
+            onClick={() => handleQuickToken(sym)}
+          >
+            {sym}
+          </button>
         ))}
         <button className="analyze-btn" onClick={handleAnalyze}>Analyze ↗</button>
       </div>
 
+      {/* Metric cards */}
       <div className="ti-metrics">
-        <div className="sd-card">
-          <div className="sd-card-title">Price</div>
-          <div style={{fontFamily:'Syne,sans-serif',fontSize:'22px',fontWeight:700}}>
+        <div className="ti-card">
+          <div className="card-title">Price</div>
+          <div className="metric-value">
             {loading ? '...' : token?.status === 'pre_launch' ? 'Pre-launch' : formatPrice(token?.price ?? 0)}
           </div>
           <div className={`metric-card-sub ${changeClass(token?.change_24h)}`}>
             {token?.change_24h != null ? formatChange(token.change_24h) + ' (24h)' : '—'}
           </div>
         </div>
-        <div className="sd-card">
-          <div className="sd-card-title">Real Liquidity <span className="pill pill-sdk" style={{fontSize:'9px',padding:'1px 5px'}}>SDK</span></div>
-          <div style={{fontFamily:'Syne,sans-serif',fontSize:'22px',fontWeight:700,color:'#00e5b4'}}>{liqReal ? formatCompact(liqReal) : 'TBD'}</div>
-          <div style={{fontSize:'10px',color:'rgba(255,255,255,0.35)',marginTop:'4px'}}>vs {liqReported ? formatCompact(liqReported) : '—'} reported</div>
+        <div className="ti-card">
+          <div className="card-title">
+            Real Liquidity
+            <span className="pill pill-sdk" style={{fontSize:'9px',padding:'1px 5px'}}>SDK</span>
+          </div>
+          <div className="metric-value accent">{liqReal ? formatCompact(liqReal) : 'TBD'}</div>
+          <div className="metric-label">vs {liqReported ? formatCompact(liqReported) : '—'} reported</div>
         </div>
-        <div className="sd-card">
-          <div className="sd-card-title">Smart Money Flow</div>
-          <div style={{fontFamily:'Syne,sans-serif',fontSize:'22px',fontWeight:700,color:'#00e5b4'}}>{token?.smart_money_flow ?? '—'}</div>
-          <div style={{fontSize:'10px',color:'rgba(255,255,255,0.35)',marginTop:'4px'}}>Net 24h</div>
+        <div className="ti-card">
+          <div className="card-title">Smart Money Flow</div>
+          <div className="metric-value accent">{token?.smart_money_flow ?? '—'}</div>
+          <div className="metric-label">Net 24h</div>
         </div>
-        <div className="sd-card">
-          <div className="sd-card-title">Scam Risk</div>
-          <div style={{marginTop:'4px',display:'flex',alignItems:'center',gap:'8px'}}>
-            <span className={`scam-badge ${token?.meta?.scam_risk === 'none' ? 'scam-safe' : token?.meta?.scam_risk === 'low' ? 'scam-warn' : 'scam-danger'}`}>
-              {token?.meta?.scam_risk === 'none' ? 'Verified' : token?.meta?.scam_risk === 'low' ? 'Low Risk' : token?.meta?.scam_risk ?? 'Unknown'}
+        <div className="ti-card">
+          <div className="card-title">Scam Risk</div>
+          <div className="scam-row">
+            <span className={`scam-badge ${
+              token?.meta?.scam_risk === 'none' ? 'scam-safe'
+              : token?.meta?.scam_risk === 'low' ? 'scam-warn'
+              : 'scam-danger'
+            }`}>
+              {token?.meta?.scam_risk === 'none' ? 'Verified'
+               : token?.meta?.scam_risk === 'low' ? 'Low Risk'
+               : token?.meta?.scam_risk ?? 'Unknown'}
             </span>
           </div>
         </div>
       </div>
 
+      {/* AI analysis box */}
       <div className="ai-box">
         <div className="ai-header">
           <div className="ai-orb">◆</div>
           <span className="ai-label">Rialo Signal AI</span>
           <span className="ai-mode">{aiContent[aiIdx]?.mode}</span>
-          <span className="pill pill-live" style={{fontSize:'9px',padding:'2px 6px'}}><span className="dot-pulse"></span> Analyzing</span>
+          <span className="pill pill-live" style={{fontSize:'9px',padding:'2px 6px'}}>
+            <span className="dot-pulse"></span> Analyzing
+          </span>
         </div>
-        <div className="ai-text">{aiText}{isTyping && <span className="ai-cursor"></span>}</div>
+        <div className="ai-text">
+          {aiText}
+          {isTyping && <span className="ai-cursor"></span>}
+        </div>
       </div>
 
+      {/* Pump signals + Liquidity */}
       <div className="ti-grid">
         <div className="ti-card">
-          <div className="ti-card-title">Why is this pumping?</div>
+          <div className="card-title">Why is this pumping?</div>
           {(token?.pump_signals ?? []).map((sig, i) => {
-            const color = sig.direction === 'bullish' ? '#00e5b4' : sig.direction === 'bearish' ? '#ef4444' : sig.direction === 'catalyst' ? '#f59e0b' : '#7B6EF6'
+            const dir = directionClass(sig.direction)
             return (
               <div className="pump-row" key={i}>
-                <div className="pump-icon" style={{background:color+'22',color}}>▲</div>
+                <div className={`pump-icon pump-icon-${dir}`}>▲</div>
                 <div className="pump-signal-name">{sig.signal}</div>
-                <div className="pump-meter"><div className="pump-meter-fill" style={{width:`${sig.strength*100}%`,background:color}}/></div>
-                <div className="pump-strength" style={{color}}>{(sig.strength*100).toFixed(0)}%</div>
+                <div className="pump-meter">
+                  <div
+                    className={`pump-meter-fill pump-meter-fill-${dir}`}
+                    style={{width:`${sig.strength*100}%`}}
+                  />
+                </div>
+                <div className={`pump-strength pump-strength-${dir}`}>
+                  {(sig.strength*100).toFixed(0)}%
+                </div>
               </div>
             )
           })}
         </div>
         <div className="ti-card">
-          <div className="ti-card-title">Real vs Reported Liquidity <span className="pill pill-sdk" style={{fontSize:'9px',padding:'2px 5px'}}>Rialo Stream</span></div>
+          <div className="card-title">
+            Real vs Reported Liquidity
+            <span className="pill pill-sdk" style={{fontSize:'9px',padding:'2px 5px'}}>Rialo Stream</span>
+          </div>
           {[
             {source:'Binance spot',  real:liqReal*0.46, rep:liqReported*0.38},
             {source:'Coinbase spot', real:liqReal*0.28, rep:liqReported*0.26},
             {source:'Uniswap v3',   real:liqReal*0.17, rep:liqReported*0.17},
             {source:'OKX perp',     real:liqReal*0.09, rep:liqReported*0.19},
-          ].map((row,i) => (
+          ].map((row, i) => (
             <div className="liq-row" key={i}>
               <span className="liq-source">{row.source}</span>
-              <div><span className="liq-real up">{formatCompact(row.real)}</span><span className="liq-fake">reported {formatCompact(row.rep)}</span></div>
+              <div>
+                <span className="liq-real up">{formatCompact(row.real)}</span>
+                <span className="liq-fake">reported {formatCompact(row.rep)}</span>
+              </div>
             </div>
           ))}
-          <div className="liq-row" style={{borderTop:'0.5px solid rgba(255,255,255,0.08)',marginTop:'4px',paddingTop:'8px'}}>
-            <span style={{fontWeight:500}}>Real total</span>
-            <div><span className="liq-real up" style={{fontSize:'14px'}}>{formatCompact(liqReal)}</span><span className="liq-fake">vs {formatCompact(liqReported)} reported ({liqAuth}% authentic)</span></div>
+          <div className="liq-row liq-row-total">
+            <span className="liq-total-label">Real total</span>
+            <div>
+              <span className="liq-real up" style={{fontSize:'14px'}}>{formatCompact(liqReal)}</span>
+              <span className="liq-fake">
+                vs {formatCompact(liqReported)} reported ({liqAuth}% authentic)
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
+      {/* Holder distribution */}
       <div className="ti-card" style={{marginBottom:'14px'}}>
-        <div className="ti-card-title">Holder Distribution <span className="pill pill-sdk" style={{fontSize:'9px',padding:'2px 5px'}}>Rialo IPC</span></div>
+        <div className="card-title">
+          Holder Distribution
+          <span className="pill pill-sdk" style={{fontSize:'9px',padding:'2px 5px'}}>Rialo IPC</span>
+        </div>
         <div className="dist-bar">
-          <div className="dist-seg" style={{width:`${dist.top10_whales}%`,background:'#ef4444'}}/>
-          <div className="dist-seg" style={{width:`${dist.exchanges}%`,background:'#f59e0b'}}/>
-          <div className="dist-seg" style={{width:`${dist.smart_money}%`,background:'#7B6EF6'}}/>
-          <div className="dist-seg" style={{width:`${dist.retail}%`,background:'rgba(0,229,180,0.55)'}}/>
+          <div className="dist-seg dist-seg-whales"    style={{width:`${dist.top10_whales}%`}} />
+          <div className="dist-seg dist-seg-exchanges" style={{width:`${dist.exchanges}%`}} />
+          <div className="dist-seg dist-seg-smart"     style={{width:`${dist.smart_money}%`}} />
+          <div className="dist-seg dist-seg-retail"    style={{width:`${dist.retail}%`}} />
         </div>
         <div className="dist-legend">
-          <span><span className="dist-dot" style={{background:'#ef4444'}}></span>Top 10 whales: <span className="down">{dist.top10_whales}%</span></span>
-          <span><span className="dist-dot" style={{background:'#f59e0b'}}></span>Exchanges: <span className="warn">{dist.exchanges}%</span></span>
-          <span><span className="dist-dot" style={{background:'#7B6EF6'}}></span>Smart money: <span style={{color:'#7B6EF6'}}>{dist.smart_money}%</span></span>
-          <span><span className="dist-dot" style={{background:'rgba(0,229,180,0.6)'}}></span>Retail: <span className="up">{dist.retail}%</span></span>
+          <span>
+            <span className="dist-dot dist-dot-whales"></span>
+            Top 10 whales: <span className="down">{dist.top10_whales}%</span>
+          </span>
+          <span>
+            <span className="dist-dot dist-dot-exchanges"></span>
+            Exchanges: <span className="warn">{dist.exchanges}%</span>
+          </span>
+          <span>
+            <span className="dist-dot dist-dot-smart"></span>
+            Smart money: <span className="cyan">{dist.smart_money}%</span>
+          </span>
+          <span>
+            <span className="dist-dot dist-dot-retail"></span>
+            Retail: <span className="up">{dist.retail}%</span>
+          </span>
         </div>
       </div>
     </div>

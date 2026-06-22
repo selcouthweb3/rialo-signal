@@ -10,11 +10,11 @@ function seed(str) {
 
 function genWhaleNodes() {
   const types = [
-    { type: 'mega_whale', label: 'Mega Whale',  count: 4,  sizeRange: [42,58], color: '#ef4444' },
-    { type: 'exchange',   label: 'Exchange',     count: 5,  sizeRange: [32,46], color: '#f59e0b' },
-    { type: 'smart',      label: 'Smart Money',  count: 7,  sizeRange: [22,34], color: '#7B6EF6' },
+    { type: 'mega_whale', label: 'Mega Whale',  count: 4,  sizeRange: [42,58], color: '#F87171' },
+    { type: 'exchange',   label: 'Exchange',     count: 5,  sizeRange: [32,46], color: '#FBBF24' },
+    { type: 'smart',      label: 'Smart Money',  count: 7,  sizeRange: [22,34], color: '#A78BFA' },
     { type: 'vc',         label: 'VC / Fund',    count: 5,  sizeRange: [28,42], color: '#38bdf8' },
-    { type: 'retail',     label: 'Retail',       count: 12, sizeRange: [22,32], color: '#00e5b4' },
+    { type: 'retail',     label: 'Retail',       count: 12, sizeRange: [22,32], color: '#34D399' },
   ]
   const nodes = []
   types.forEach(t => {
@@ -47,14 +47,14 @@ function genWhaleNodes() {
 
 function genSignalNodes() {
   const sigs = [
-    { id:'vol',       name:'Volatility',    r:48, val:'0.72', color:'#f59e0b', desc:'Elevated — predicate armed' },
-    { id:'spread',    name:'RWA/Crypto',    r:54, val:'0.81', color:'#ef4444', desc:'Critical divergence' },
-    { id:'momentum',  name:'Momentum',      r:40, val:'0.65', color:'#00e5b4', desc:'Positive signal' },
-    { id:'liquidity', name:'Liquidity',     r:36, val:'0.58', color:'#00e5b4', desc:'Real vs reported gap' },
-    { id:'yield',     name:'Yield Div.',    r:44, val:'0.77', color:'#f59e0b', desc:'Bond/crypto decoupling' },
-    { id:'sentiment', name:'Sentiment',     r:32, val:'0.61', color:'#00e5b4', desc:'Positive spike 2h ago' },
-    { id:'whale_acc', name:'Whale Accum.',  r:42, val:'0.82', color:'#ef4444', desc:'Smart money buying' },
-    { id:'exchange',  name:'CEX Flow',      r:34, val:'0.44', color:'#38bdf8', desc:'Supply leaving CEXs' },
+    { id:'vol',       name:'Volatility',    r:48, val:'0.72', color:'#FBBF24', desc:'Elevated — predicate armed' },
+    { id:'spread',    name:'RWA/Crypto',    r:54, val:'0.81', color:'#F87171', desc:'Critical divergence' },
+    { id:'momentum',  name:'Momentum',      r:40, val:'0.65', color:'#A78BFA', desc:'Positive signal' },
+    { id:'liquidity', name:'Liquidity',     r:36, val:'0.58', color:'#A78BFA', desc:'Real vs reported gap' },
+    { id:'yield',     name:'Yield Div.',    r:44, val:'0.77', color:'#FBBF24', desc:'Bond/crypto decoupling' },
+    { id:'sentiment', name:'Sentiment',     r:32, val:'0.61', color:'#34D399', desc:'Positive spike 2h ago' },
+    { id:'whale_acc', name:'Whale Accum.',  r:42, val:'0.82', color:'#F87171', desc:'Smart money buying' },
+    { id:'exchange',  name:'CEX Flow',      r:34, val:'0.44', color:'#22D3EE', desc:'Supply leaving CEXs' },
   ]
   const links = [
     { source:'vol',       target:'spread',    strength:0.7  },
@@ -72,15 +72,15 @@ function genSignalNodes() {
 
 function genFlowNodes() {
   const all = [
-    { id:'us10y', name:'US 10Y',    r:42, color:'#00e5b4', cat:'rwa',    val:'-0.3%', holding:'4.40% yield' },
-    { id:'gold',  name:'Gold',      r:40, color:'#00e5b4', cat:'rwa',    val:'+0.8%', holding:'$3,314/oz'   },
-    { id:'spx',   name:'S&P 500',   r:44, color:'#00e5b4', cat:'rwa',    val:'+0.5%', holding:'$5,282'      },
-    { id:'oil',   name:'Oil',       r:32, color:'#00e5b4', cat:'rwa',    val:'-0.8%', holding:'$64.1/bbl'   },
-    { id:'btc',   name:'BTC',       r:54, color:'#7B6EF6', cat:'crypto', val:'+1.2%', holding:'$75,000'     },
-    { id:'eth',   name:'ETH',       r:46, color:'#7B6EF6', cat:'crypto', val:'-2.2%', holding:'$1,580'      },
-    { id:'sol',   name:'SOL',       r:38, color:'#7B6EF6', cat:'crypto', val:'-1.1%', holding:'$120'        },
-    { id:'rlo',   name:'RLO',       r:30, color:'#00e5b4', cat:'crypto', val:'TBD',   holding:'Rialo native'},
-    { id:'defi',  name:'DeFi',      r:34, color:'#7B6EF6', cat:'crypto', val:'+1.8%', holding:'Basket'      },
+    { id:'us10y', name:'US 10Y',    r:42, color:'#A78BFA', cat:'rwa',    val:'-0.3%', holding:'4.40% yield' },
+    { id:'gold',  name:'Gold',      r:40, color:'#A78BFA', cat:'rwa',    val:'+0.8%', holding:'$3,314/oz'   },
+    { id:'spx',   name:'S&P 500',   r:44, color:'#A78BFA', cat:'rwa',    val:'+0.5%', holding:'$5,282'      },
+    { id:'oil',   name:'Oil',       r:32, color:'#A78BFA', cat:'rwa',    val:'-0.8%', holding:'$64.1/bbl'   },
+    { id:'btc',   name:'BTC',       r:54, color:'#22D3EE', cat:'crypto', val:'+1.2%', holding:'$75,000'     },
+    { id:'eth',   name:'ETH',       r:46, color:'#22D3EE', cat:'crypto', val:'-2.2%', holding:'$1,580'      },
+    { id:'sol',   name:'SOL',       r:38, color:'#22D3EE', cat:'crypto', val:'-1.1%', holding:'$120'        },
+    { id:'rlo',   name:'RLO',       r:30, color:'#A78BFA', cat:'crypto', val:'TBD',   holding:'Rialo native'},
+    { id:'defi',  name:'DeFi',      r:34, color:'#22D3EE', cat:'crypto', val:'+1.8%', holding:'Basket'      },
   ]
   const links = [
     { source:'spx',   target:'btc', strength:0.48 },
@@ -101,11 +101,11 @@ const VIEWS = {
     stats:['247','18.4%','22.1%','0 bots'],
     statLbl:['Wallets tracked','Whale concentration','Smart money','Bots required'],
     legend:[
-      {color:'#ef4444',label:'Mega whale'},
-      {color:'#f59e0b',label:'Exchange'},
-      {color:'#7B6EF6',label:'Smart money'},
+      {color:'#F87171',label:'Mega whale'},
+      {color:'#FBBF24',label:'Exchange'},
+      {color:'#A78BFA',label:'Smart money'},
       {color:'#38bdf8',label:'VC / Fund'},
-      {color:'#00e5b4',label:'Retail'},
+      {color:'#34D399',label:'Retail'},
     ],
   },
   signal: {
@@ -113,9 +113,9 @@ const VIEWS = {
     stats:['8','0.74','2','0 bots'],
     statLbl:['Active signals','Avg strength','Critical alerts','Bots required'],
     legend:[
-      {color:'#00e5b4',label:'Bullish signal'},
-      {color:'#ef4444',label:'Bearish signal'},
-      {color:'#f59e0b',label:'Warning signal'},
+      {color:'#A78BFA',label:'Bullish signal'},
+      {color:'#F87171',label:'Bearish signal'},
+      {color:'#FBBF24',label:'Warning signal'},
     ],
   },
   flow: {
@@ -123,8 +123,8 @@ const VIEWS = {
     stats:['9','0.48','$3.3B','0 bots'],
     statLbl:['Assets tracked','RWA/Crypto corr.','Real liquidity','Bots required'],
     legend:[
-      {color:'#00e5b4',label:'RWA asset'},
-      {color:'#7B6EF6',label:'Crypto asset'},
+      {color:'#A78BFA',label:'RWA asset'},
+      {color:'#22D3EE',label:'Crypto asset'},
     ],
   },
 }
@@ -159,10 +159,10 @@ export default function ClusterMap() {
         .attr('x1', cx).attr('y1', 20).attr('x2', cx).attr('y2', H - 20)
         .attr('stroke','rgba(255,255,255,0.06)').attr('stroke-width',1).attr('stroke-dasharray','5,4')
       svg.append('text').text('RWA')
-        .attr('x', cx-80).attr('y',18).attr('fill','rgba(0,229,180,0.4)')
+        .attr('x', cx-80).attr('y',18).attr('fill','rgba(167,139,250,0.4)')
         .attr('font-size',10).attr('font-family','DM Mono,monospace').attr('text-anchor','middle')
       svg.append('text').text('CRYPTO')
-        .attr('x', cx+80).attr('y',18).attr('fill','rgba(123,110,246,0.4)')
+        .attr('x', cx+80).attr('y',18).attr('fill','rgba(34,211,238,0.4)')
         .attr('font-size',10).attr('font-family','DM Mono,monospace').attr('text-anchor','middle')
     }
 
@@ -305,7 +305,11 @@ export default function ClusterMap() {
       <div className="cm-header">
         <div className="cm-tabs">
           {Object.keys(VIEWS).map(key => (
-            <button key={key} className={`cm-tab ${activeView===key?'active':''}`} onClick={()=>setActiveView(key)}>
+            <button
+              key={key}
+              className={`cm-tab ${activeView===key?'active':''}`}
+              onClick={() => setActiveView(key)}
+            >
               {key==='whale'?'Whale Wallets':key==='signal'?'Signal Map':'RWA vs Crypto'}
             </button>
           ))}
@@ -316,10 +320,13 @@ export default function ClusterMap() {
       </div>
 
       <div className="cm-stats">
-        {vd.statLbl.map((lbl,i) => (
+        {vd.statLbl.map((lbl, i) => (
           <div className="sd-card" key={lbl}>
-            <div className="sd-card-title">{lbl}</div>
-            <div style={{fontFamily:'Syne,sans-serif',fontSize:'22px',fontWeight:700,color:i===3?'#00e5b4':'rgba(255,255,255,0.88)'}}>
+            <div className="card-title">{lbl}</div>
+            <div
+              className="metric-value"
+              style={{color: i === 3 ? 'var(--accent)' : undefined}}
+            >
               {vd.stats[i]}
             </div>
           </div>
@@ -333,7 +340,7 @@ export default function ClusterMap() {
         <div className="cm-legend">
           {vd.legend.map(l => (
             <div className="cm-leg-item" key={l.label}>
-              <div className="cm-leg-dot" style={{background:l.color}} />
+              <div className="cm-leg-dot" style={{background: l.color}} />
               {l.label}
             </div>
           ))}
@@ -342,7 +349,7 @@ export default function ClusterMap() {
       </div>
 
       <div className="sdk-note">
-        🔵 On mainnet: Rialo Read Path delivers wallet state from validators. No indexer, no API key.
+        On mainnet: Rialo Read Path delivers wallet state from validators. No indexer, no API key.
       </div>
     </div>
   )

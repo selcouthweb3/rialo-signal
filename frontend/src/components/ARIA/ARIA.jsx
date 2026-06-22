@@ -62,7 +62,6 @@ export default function ARIA({ wallet = '' }) {
       <button
         className="aria-toggle"
         onClick={() => setOpen(o => !o)}
-        style={{ position: 'fixed', bottom: '24px', right: '24px' }}
       >
         {!open && <span className="aria-notif-dot"></span>}
         <span className="aria-toggle-icon">{open ? '✕' : '◆'}</span>
@@ -81,7 +80,7 @@ export default function ARIA({ wallet = '' }) {
             <div className="aria-header-info">
               <div className="aria-name">ARIA</div>
               <div className="aria-status">
-                <span style={{width:'5px',height:'5px',borderRadius:'50%',background:'#00e5b4',display:'inline-block',animation:'pulse-anim 1.8s ease-in-out infinite'}}></span>
+                <span className="aria-status-dot"></span>
                 Rialo Signal Intelligence
               </div>
             </div>
@@ -117,7 +116,9 @@ export default function ARIA({ wallet = '' }) {
           {messages.length <= 1 && (
             <div className="aria-suggestions">
               {SUGGESTIONS.map(s => (
-                <button key={s} className="aria-suggest-btn" onClick={() => sendMessage(s)}>{s}</button>
+                <button key={s} className="aria-suggest-btn" onClick={() => sendMessage(s)}>
+                  {s}
+                </button>
               ))}
             </div>
           )}
@@ -132,7 +133,13 @@ export default function ARIA({ wallet = '' }) {
               placeholder="Ask ARIA anything..."
               rows={1}
             />
-            <button className="aria-send" onClick={() => sendMessage()} disabled={loading || !input.trim()}>➤</button>
+            <button
+              className="aria-send"
+              onClick={() => sendMessage()}
+              disabled={loading || !input.trim()}
+            >
+              ➤
+            </button>
           </div>
         </div>
       )}
