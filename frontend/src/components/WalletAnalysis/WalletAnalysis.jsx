@@ -32,21 +32,31 @@ const TYPE_INITIALS = {
 }
 
 export default function WalletAnalysis() {
-  const [inputVal, setInputVal] = useState('')
-  const [wallet, setWallet]     = useState(null)
-  const [loading, setLoading]   = useState(false)
-  const [error, setError]       = useState(null)
+  const [inputVal, setInputVal]   = useState('')
+  const [wallet, setWallet]       = useState(null)
+  const [loading, setLoading]     = useState(false)
+  const [retrying, setRetrying]   = useState(false)
+  const [error, setError]         = useState(null)
 
   async function analyze(address) {
     if (!address || address.length < 6) return
-    setLoading(true); setError(null)
+    setLoading(true); setRetrying(false); setError(null); setWallet(null)
     try {
       const data = await fetchWalletAnalysis(address)
       setWallet(data)
     } catch {
-      setError('Could not analyze wallet. Try a different address.')
+      // First attempt failed — retry once after 2s with user feedback
+      setRetrying(true)
+      await new Promise(r => setTimeout(r, 2000))
+      try {
+        const data = await fetchWalletAnalysis(address)
+        setWallet(data)
+      } catch {
+        setError("Couldn't reach the analysis service. The backend may be waking up — try again in 30 seconds.")
+      }
     } finally {
       setLoading(false)
+      setRetrying(false)
     }
   }
 
@@ -112,6 +122,11 @@ export default function WalletAnalysis() {
       {/* Skeleton loader */}
       {loading && (
         <div>
+          {retrying && (
+            <div className="wa-retry-notice">
+              Backend taking longer than usual. Retrying...
+            </div>
+          )}
           <div className="wa-skeleton-profile">
             <div className="skeleton wa-skeleton-avatar"></div>
             <div className="wa-skeleton-info">

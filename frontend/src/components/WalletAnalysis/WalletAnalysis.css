@@ -90,6 +90,18 @@
 .wa-example-name { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.7); }
 .wa-example-addr { font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); }
 
+/* ── Retry notice ────────────────────────────────────────── */
+.wa-retry-notice {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--warn);
+  background: rgba(251,191,36,0.07);
+  border: 0.5px solid rgba(251,191,36,0.2);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  margin-bottom: 12px;
+}
+
 /* ── Skeleton loader ─────────────────────────────────────── */
 @keyframes shimmer {
   from { background-position: -400% 0; }

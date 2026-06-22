@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Topbar from './components/Layout/Topbar'
 import SignalDashboard from './components/SignalDashboard/SignalDashboard'
 import TokenIntel from './components/TokenIntel/TokenIntel'
@@ -33,12 +33,14 @@ const TABS = [
 ]
 
 export default function App() {
-  /*
-    useState returns [currentValue, setterFunction]
-    When setActiveTab is called, React re-renders the component
-    with the new tab value. This is how React is "reactive."
-  */
   const [activeTab, setActiveTab] = useState('signals')
+
+  useEffect(() => {
+    // Fire-and-forget warm-up ping so Render backend wakes before user interaction.
+    // Render free tier sleeps after 15 min idle; cold start takes ~38s.
+    const apiBase = import.meta.env.VITE_API_URL || '/api'
+    fetch(`${apiBase}/prices/all`).catch(() => {})
+  }, [])
 
   return (
     <div className="app-shell">
