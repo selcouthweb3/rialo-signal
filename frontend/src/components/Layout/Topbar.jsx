@@ -51,11 +51,11 @@ export default function Topbar({ tabs, activeTab, onTabChange }) {
 
         {/* Status indicators */}
         <div className="topbar-status">
-          <span className="pill pill-live">
+          <span className="pill pill-live pill-fade-in">
             <span className="dot-pulse"></span>
             Live
           </span>
-          <span className="pill pill-sdk">
+          <span className="pill pill-sdk pill-fade-in" style={{animationDelay:'0.3s'}}>
             <span className="dot-pulse" style={{ animationDuration: '2.5s' }}></span>
             SDK Ready
           </span>

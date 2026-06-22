@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { usePrices } from '../../hooks/usePrices'
 import { useSignals } from '../../hooks/useSignals'
 import { formatPrice, formatChange, changeClass, signalColor, signalClass, riskColor } from '../../utils/format'
+import PipelineFlow from './PipelineFlow'
 import './SignalDashboard.css'
 
 const SIGNAL_LABELS = {
@@ -90,40 +91,7 @@ export default function SignalDashboard() {
         </div>
       </div>
 
-      {/* Pipeline diagram */}
-      <div className="pipeline">
-        <div className="card-title">Live data pipeline</div>
-        <div className="pipeline-steps">
-          {[
-            {label:'External API\nCoinGecko\n+ RWA feeds', live:true},
-            {label:'Signal\nEngine\n(PRISM)',              live:true},
-            {label:'Rialo Edge\nWeb Call\nOnchain',        live:false},
-            {label:'Predicate\nEvaluation\nReactive TX',   live:false},
-            {label:'SfS Yield\nAuto-routes\nFees',         live:false},
-            {label:'TX Fires\nNo Bot\nRequired',           live:false},
-          ].map((step, i, arr) => (
-            <React.Fragment key={i}>
-              <div className="pipe-step">
-                <div className={`pipe-box ${step.live ? 'live' : 'sdk'}`}>
-                  {step.label.split('\n').map((line, j) => <div key={j}>{line}</div>)}
-                </div>
-                <div className="pipe-lbl">{step.live ? 'Live' : 'SDK'}</div>
-              </div>
-              {i < arr.length - 1 && <div className="pipe-arrow">→</div>}
-            </React.Fragment>
-          ))}
-        </div>
-        <div className="pipeline-legend">
-          <div className="legend-item">
-            <div className="legend-dot legend-dot-live"></div>
-            Live now
-          </div>
-          <div className="legend-item">
-            <div className="legend-dot legend-dot-sdk"></div>
-            Rialo SDK — ready, waiting for mainnet
-          </div>
-        </div>
-      </div>
+      <PipelineFlow />
 
       {/* Main two-column grid */}
       <div className="sd-grid">

@@ -1,7 +1,14 @@
 import React, { useState } from 'react'
+import { Search } from 'lucide-react'
 import { fetchWalletAnalysis } from '../../services/api'
-import { formatPrice, formatCompact, formatChange, changeClass, shortAddress } from '../../utils/format'
+import { formatPrice, formatChange, changeClass, shortAddress } from '../../utils/format'
 import './WalletAnalysis.css'
+
+const EXAMPLE_WALLETS = [
+  { label: 'Vitalik',            address: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045' },
+  { label: 'Binance Hot Wallet', address: '0x28C6c06298d514Db089934071355E5743bf21d60' },
+  { label: 'Uniswap V3',         address: '0xE592427A0AEce92De3Edee1F18E0157C05861564' },
+]
 
 const SAMPLE_WALLETS = [
   { label: 'Whale',       address: '0x3f8ad91c4422b9e1' },
@@ -85,18 +92,46 @@ export default function WalletAnalysis() {
         <div className="sdk-note sdk-note-error" style={{marginBottom:'14px'}}>{error}</div>
       )}
 
+      {/* Empty state */}
       {!wallet && !loading && !error && (
         <div className="wa-empty">
-          <div className="wa-empty-icon">◈</div>
+          <Search className="wa-empty-icon-svg" size={48} strokeWidth={1} />
           <div className="wa-empty-title">Enter a wallet address to begin analysis</div>
-          <div className="wa-empty-sub">Or click a sample wallet above</div>
+          <div className="wa-empty-sub">Or try one of these example wallets</div>
+          <div className="wa-empty-examples">
+            {EXAMPLE_WALLETS.map(ex => (
+              <button key={ex.address} className="wa-example-pill" onClick={() => handleSample(ex.address)}>
+                <span className="wa-example-name">{ex.label}</span>
+                <span className="wa-example-addr">{shortAddress(ex.address)}</span>
+              </button>
+            ))}
+          </div>
         </div>
       )}
 
+      {/* Skeleton loader */}
       {loading && (
-        <div className="wa-loading">Scanning wallet onchain...</div>
+        <div>
+          <div className="wa-skeleton-profile">
+            <div className="skeleton wa-skeleton-avatar"></div>
+            <div className="wa-skeleton-info">
+              <div className="skeleton wa-skeleton-name"></div>
+              <div className="skeleton wa-skeleton-type"></div>
+            </div>
+          </div>
+          <div className="wa-grid">
+            {[0, 1].map(col => (
+              <div className="wa-card" key={col}>
+                {[1, 2, 3, 4].map(i => (
+                  <div key={i} className="skeleton" style={{height:'34px', marginBottom:'8px', borderRadius:'6px'}}></div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
       )}
 
+      {/* Wallet data */}
       {wallet && !loading && (
         <>
           {/* Profile row */}

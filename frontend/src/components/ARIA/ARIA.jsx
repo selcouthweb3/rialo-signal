@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { Sparkles, X } from 'lucide-react'
 import './ARIA.css'
 
 const SUGGESTIONS = [
@@ -64,7 +65,7 @@ export default function ARIA({ wallet = '' }) {
         onClick={() => setOpen(o => !o)}
       >
         {!open && <span className="aria-notif-dot"></span>}
-        <span className="aria-toggle-icon">{open ? '✕' : '◆'}</span>
+        <span className="aria-toggle-icon">{open ? <X size={18} strokeWidth={2.5} /> : <Sparkles size={18} strokeWidth={1.8} />}</span>
         {!open && (
           <div className="aria-toggle-text">
             <span className="aria-toggle-label">Ask ARIA</span>
@@ -76,7 +77,7 @@ export default function ARIA({ wallet = '' }) {
       {open && (
         <div className="aria-panel">
           <div className="aria-header">
-            <div className="aria-avatar">◆</div>
+            <div className="aria-avatar"><Sparkles size={14} strokeWidth={1.5} /></div>
             <div className="aria-header-info">
               <div className="aria-name">ARIA</div>
               <div className="aria-status">
@@ -91,7 +92,7 @@ export default function ARIA({ wallet = '' }) {
             {messages.map((msg, i) => (
               <div key={i} className={`msg-wrap ${msg.role === 'user' ? 'user' : ''}`}>
                 <div className={`msg-avatar ${msg.role === 'aria' ? 'aria-av' : 'user-av'}`}>
-                  {msg.role === 'aria' ? '◆' : 'U'}
+                  {msg.role === 'aria' ? <Sparkles size={11} strokeWidth={1.5} /> : 'U'}
                 </div>
                 <div className={`msg-bubble ${msg.role === 'aria' ? 'aria-bubble' : 'user-bubble'}`}>
                   {msg.text}
@@ -100,7 +101,7 @@ export default function ARIA({ wallet = '' }) {
             ))}
             {loading && (
               <div className="msg-wrap">
-                <div className="msg-avatar aria-av">◆</div>
+                <div className="msg-avatar aria-av"><Sparkles size={11} strokeWidth={1.5} /></div>
                 <div className="msg-bubble aria-bubble">
                   <div className="msg-typing">
                     <div className="typing-dot"></div>

@@ -16,7 +16,7 @@
 }
 .aria-toggle:hover {
   transform: scale(1.04);
-  box-shadow: 0 6px 32px rgba(167, 139, 250, 0.5);
+  box-shadow: 0 0 0 2px rgba(167,139,250,0.55), 0 6px 32px rgba(167,139,250,0.4);
 }
 .aria-toggle-icon {
   font-size: 18px;
@@ -49,13 +49,13 @@
 }
 .aria-notif-dot {
   position: absolute;
-  top: -3px;
-  right: -3px;
-  width: 10px;
-  height: 10px;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--accent);
-  border: 2px solid var(--bg-base);
+  border: 1.5px solid var(--bg-base);
 }
 .aria-panel {
   position: fixed;
