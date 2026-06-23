@@ -26,6 +26,7 @@ export const fetchLiveSignals = () => api.get('/signals/live')
 export const fetchPumpSignals = (symbol) => api.get(`/signals/pump/${symbol}`)
 export const fetchTokenIntelligence = (symbol) => api.get(`/tokens/${symbol}`)
 export const fetchWalletAnalysis = (address) => api.get(`/wallet/${address}`)
+export const fetchWalletV2       = (address) => api.get(`/wallet/v2/${address}`)
 export const fetchRialoStatus = () => api.get('/rialo/status')
 export const fetchStreamFeed = (pair) => api.get(`/rialo/stream/${pair}`)
 export const fetchSFSEstimate = (staked, fraction) =>

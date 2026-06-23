@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 
-from app.routes import prices, signals, tokens, wallet, rialo, chat
+from app.routes import prices, signals, tokens, wallet, rialo, chat, wallet_v2
 from app.services.cache import cache
 
 app = FastAPI(
@@ -24,7 +24,8 @@ app.add_middleware(
 app.include_router(prices.router, prefix="/api/prices", tags=["Prices"])
 app.include_router(signals.router, prefix="/api/signals", tags=["Signals"])
 app.include_router(tokens.router, prefix="/api/tokens", tags=["Tokens"])
-app.include_router(wallet.router, prefix="/api/wallet", tags=["Wallet"])
+app.include_router(wallet.router,    prefix="/api/wallet",    tags=["Wallet"])
+app.include_router(wallet_v2.router, prefix="/api/wallet/v2", tags=["Wallet V2"])
 app.include_router(rialo.router, prefix="/api/rialo", tags=["Rialo SDK"])
 app.include_router(chat.router, prefix="/api/chat", tags=["ARIA"])
 
