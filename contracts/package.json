@@ -1,0 +1,19 @@
+{
+  "name": "rialo-signal-contracts",
+  "version": "1.0.0",
+  "description": "Rialo Signal onchain contracts (Sepolia testnet)",
+  "private": true,
+  "scripts": {
+    "compile":         "hardhat compile",
+    "deploy:staking":  "hardhat run scripts/deployStaking.js --network sepolia",
+    "deploy:registry": "hardhat run scripts/deployRegistry.js --network sepolia",
+    "test":            "hardhat test"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}
