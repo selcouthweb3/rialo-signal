@@ -5,6 +5,7 @@ import SignalDashboard from './components/SignalDashboard/SignalDashboard'
 import TokenIntel from './components/TokenIntel/TokenIntel'
 import ClusterMap from './components/ClusterMap/ClusterMap'
 import WalletAnalysis from './components/WalletAnalysis/WalletAnalysis'
+import Watchlist from './components/Watchlist/Watchlist'
 import ARIA from './components/ARIA/ARIA'
 import { useWallet } from './context/WalletContext'
 import './styles/app.css'
@@ -23,6 +24,12 @@ function ChainToast() {
 export default function App() {
   const [activePage, setActivePage]             = useState('signals')
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [walletInitAddr, setWalletInitAddr]     = useState(null)
+
+  function goToWalletAnalysis(address) {
+    setWalletInitAddr(address)
+    setActivePage('wallet')
+  }
 
   useEffect(() => {
     const apiBase = import.meta.env.VITE_API_URL || '/api'
@@ -41,10 +48,18 @@ export default function App() {
       <div className={`app-body${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
         <Topbar activePage={activePage} />
         <main className="app-main">
-          {activePage === 'signals' && <SignalDashboard />}
-          {activePage === 'tokens'  && <TokenIntel />}
-          {activePage === 'cluster' && <ClusterMap />}
-          {activePage === 'wallet'  && <WalletAnalysis />}
+          {activePage === 'signals'   && <SignalDashboard />}
+          {activePage === 'tokens'    && <TokenIntel />}
+          {activePage === 'cluster'   && <ClusterMap />}
+          {activePage === 'wallet'    && (
+            <WalletAnalysis
+              initialAddress={walletInitAddr}
+              onInitConsumed={() => setWalletInitAddr(null)}
+            />
+          )}
+          {activePage === 'watchlist' && (
+            <Watchlist onAnalyse={goToWalletAnalysis} />
+          )}
         </main>
       </div>
 

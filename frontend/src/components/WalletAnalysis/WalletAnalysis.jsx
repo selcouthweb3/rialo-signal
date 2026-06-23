@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
-import { Search, Copy, ExternalLink, Wallet } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import { Search, Copy, ExternalLink, Wallet, Eye, EyeOff } from 'lucide-react'
 import { useWalletV2 } from '../../hooks/useWalletV2'
 import { useWallet } from '../../context/WalletContext'
+import { useWatchlist } from '../../hooks/useWatchlist'
 import { formatPrice, shortAddress } from '../../utils/format'
 import './WalletAnalysis.css'
 
@@ -37,10 +38,20 @@ function copyToClipboard(text) {
   navigator.clipboard.writeText(text).catch(() => {})
 }
 
-export default function WalletAnalysis() {
+export default function WalletAnalysis({ initialAddress = null, onInitConsumed }) {
   const [inputVal, setInputVal] = useState('')
   const { data, loading, error, retrying, fetch } = useWalletV2()
   const { address: connectedAddress, isConnected } = useWallet()
+  const { isWatching, addWallet, removeWallet, loading: watchLoading, toast: watchToast, contractReady } = useWatchlist()
+
+  // Auto-trigger from Watchlist navigate
+  useEffect(() => {
+    if (initialAddress) {
+      setInputVal(initialAddress)
+      fetch(initialAddress)
+      onInitConsumed?.()
+    }
+  }, [initialAddress])
 
   function handleSubmit() {
     const addr = inputVal.trim()
@@ -57,6 +68,17 @@ export default function WalletAnalysis() {
     setInputVal(connectedAddress)
     fetch(connectedAddress)
   }
+
+  async function handleWatchToggle() {
+    if (!data?.address) return
+    if (isWatching(data.address)) {
+      await removeWallet(data.address)
+    } else {
+      await addWallet(data.address)
+    }
+  }
+
+  const watching = data?.address ? isWatching(data.address) : false
 
   const entityColor = data?.entity_category
     ? (CATEGORY_COLORS[data.entity_category] || '#A78BFA')
@@ -143,6 +165,11 @@ export default function WalletAnalysis() {
       )}
 
       {/* ── Results ────────────────────────────────────────── */}
+      {/* ── Watchlist toast ─────────────────────────────────── */}
+      {watchToast && (
+        <div className="wa-watch-toast">{watchToast}</div>
+      )}
+
       {data && !loading && (
         <>
           {/* Section A — Identity header */}
@@ -187,6 +214,20 @@ export default function WalletAnalysis() {
                 <Copy size={11} />
               </button>
             </div>
+          )}
+
+          {/* Watch this Wallet button */}
+          {isConnected && contractReady && (
+            <button
+              className={`wa-watch-btn ${watching ? 'wa-watch-btn--watching' : ''}`}
+              onClick={handleWatchToggle}
+              disabled={watchLoading}
+            >
+              {watching
+                ? <><EyeOff size={13} strokeWidth={1.8} /> Watching — click to remove</>
+                : <><Eye    size={13} strokeWidth={1.8} /> Watch this Wallet</>
+              }
+            </button>
           )}
 
           {/* Section B — Metrics strip */}

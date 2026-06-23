@@ -4,6 +4,7 @@ import {
   Coins,
   Network,
   Wallet,
+  BookMarked,
   ChevronLeft,
   ChevronRight,
   Link2,
@@ -11,10 +12,11 @@ import {
 import './Sidebar.css'
 
 const NAV_ITEMS = [
-  { id: 'signals', label: 'Signal Engine',     Icon: Activity },
-  { id: 'tokens',  label: 'Token Intelligence', Icon: Coins    },
-  { id: 'cluster', label: 'Cluster Map',        Icon: Network  },
-  { id: 'wallet',  label: 'Wallet Analysis',    Icon: Wallet   },
+  { id: 'signals',   label: 'Signal Engine',     Icon: Activity   },
+  { id: 'tokens',    label: 'Token Intelligence', Icon: Coins      },
+  { id: 'cluster',   label: 'Cluster Map',        Icon: Network    },
+  { id: 'wallet',    label: 'Wallet Analysis',    Icon: Wallet     },
+  { id: 'watchlist', label: 'Watchlist',          Icon: BookMarked },
 ]
 
 export default function Sidebar({ activePage, onNavigate, collapsed, onToggleCollapse }) {
