@@ -13,10 +13,11 @@ const SUGGESTIONS = [
 
 const WELCOME = {
   role: 'aria',
-  text: "Hi, I'm ARIA — your Rialo Signal intelligence assistant. Ask me anything about your portfolio risk, current signals, token analysis, or how Rialo works. I'm aware of live market data right now.",
+  text: "Hi, I'm ARIA — your Rialo Signal intelligence assistant. Ask me anything about your portfolio risk, current signals, token analysis, or how Rialo works. I'm aware of live market data right now."
 }
 
-export default function ARIA({ open, onClose, wallet = '' }) {
+export default function ARIA({ wallet = '' }) {
+  const [open, setOpen]         = useState(false)
   const [messages, setMessages] = useState([WELCOME])
   const [input, setInput]       = useState('')
   const [loading, setLoading]   = useState(false)
@@ -28,17 +29,8 @@ export default function ARIA({ open, onClose, wallet = '' }) {
   }, [messages, loading])
 
   useEffect(() => {
-    if (open && inputRef.current) {
-      setTimeout(() => inputRef.current?.focus(), 120)
-    }
+    if (open && inputRef.current) setTimeout(() => inputRef.current?.focus(), 100)
   }, [open])
-
-  // Close on Escape
-  useEffect(() => {
-    function handleKey(e) { if (e.key === 'Escape' && open) onClose() }
-    window.addEventListener('keydown', handleKey)
-    return () => window.removeEventListener('keydown', handleKey)
-  }, [open, onClose])
 
   async function sendMessage(text) {
     const msg = text || input.trim()
@@ -49,9 +41,9 @@ export default function ARIA({ open, onClose, wallet = '' }) {
     try {
       const apiBase = import.meta.env.VITE_API_URL || '/api'
       const resp = await fetch(`${apiBase}/chat/`, {
-        method:  'POST',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ message: msg, wallet }),
+        body: JSON.stringify({ message: msg, wallet })
       })
       const data = await resp.json()
       setMessages(prev => [...prev, { role: 'aria', text: data.response }])
@@ -66,92 +58,92 @@ export default function ARIA({ open, onClose, wallet = '' }) {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage() }
   }
 
-  if (!open) return null
-
   return (
     <>
-      {/* Click-outside overlay */}
-      <div className="aria-overlay" onClick={onClose} />
-
-      <div className="aria-panel">
-        {/* Header */}
-        <div className="aria-header">
-          <div className="aria-avatar">
-            <Sparkles size={14} strokeWidth={1.5} />
-          </div>
-          <div className="aria-header-info">
-            <div className="aria-name">ARIA</div>
-            <div className="aria-status">
-              <span className="aria-status-dot" />
-              AI Intelligence
-            </div>
-          </div>
-          <button className="aria-close" onClick={onClose} aria-label="Close ARIA">
-            <X size={15} strokeWidth={2} />
-          </button>
-        </div>
-
-        {/* Messages */}
-        <div className="aria-messages">
-          {messages.map((msg, i) => (
-            <div key={i} className={`msg-wrap ${msg.role === 'user' ? 'user' : ''}`}>
-              <div className={`msg-avatar ${msg.role === 'aria' ? 'aria-av' : 'user-av'}`}>
-                {msg.role === 'aria' ? <Sparkles size={11} strokeWidth={1.5} /> : 'U'}
-              </div>
-              <div className={`msg-bubble ${msg.role === 'aria' ? 'aria-bubble' : 'user-bubble'}`}>
-                {msg.text}
-              </div>
-            </div>
-          ))}
-          {loading && (
-            <div className="msg-wrap">
-              <div className="msg-avatar aria-av">
-                <Sparkles size={11} strokeWidth={1.5} />
-              </div>
-              <div className="msg-bubble aria-bubble">
-                <div className="msg-typing">
-                  <div className="typing-dot" />
-                  <div className="typing-dot" />
-                  <div className="typing-dot" />
-                </div>
-              </div>
-            </div>
-          )}
-          <div ref={bottomRef} />
-        </div>
-
-        {/* Suggestions */}
-        {messages.length <= 1 && (
-          <div className="aria-suggestions">
-            {SUGGESTIONS.map(s => (
-              <button key={s} className="aria-suggest-btn" onClick={() => sendMessage(s)}>
-                {s}
-              </button>
-            ))}
+      <button
+        className="aria-toggle"
+        onClick={() => setOpen(o => !o)}
+      >
+        {!open && <span className="aria-notif-dot"></span>}
+        <span className="aria-toggle-icon">{open ? <X size={18} strokeWidth={2.5} /> : <Sparkles size={18} strokeWidth={1.8} />}</span>
+        {!open && (
+          <div className="aria-toggle-text">
+            <span className="aria-toggle-label">Ask ARIA</span>
+            <span className="aria-toggle-sub">AI Assistant</span>
           </div>
         )}
+      </button>
 
-        {/* Input */}
-        <div className="aria-input-row">
-          <textarea
-            ref={inputRef}
-            className="aria-input"
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            onKeyDown={handleKey}
-            placeholder="Ask ARIA anything…"
-            rows={1}
-          />
-          <button
-            className="aria-send"
-            onClick={() => sendMessage()}
-            disabled={loading || !input.trim()}
-            aria-label="Send"
-          >
-            ➤
-          </button>
+      {open && (
+        <div className="aria-panel">
+          <div className="aria-header">
+            <div className="aria-avatar"><Sparkles size={14} strokeWidth={1.5} /></div>
+            <div className="aria-header-info">
+              <div className="aria-name">ARIA</div>
+              <div className="aria-status">
+                <span className="aria-status-dot"></span>
+                Rialo Signal Intelligence
+              </div>
+            </div>
+            <button className="aria-close" onClick={() => setOpen(false)}>✕</button>
+          </div>
+
+          <div className="aria-messages">
+            {messages.map((msg, i) => (
+              <div key={i} className={`msg-wrap ${msg.role === 'user' ? 'user' : ''}`}>
+                <div className={`msg-avatar ${msg.role === 'aria' ? 'aria-av' : 'user-av'}`}>
+                  {msg.role === 'aria' ? <Sparkles size={11} strokeWidth={1.5} /> : 'U'}
+                </div>
+                <div className={`msg-bubble ${msg.role === 'aria' ? 'aria-bubble' : 'user-bubble'}`}>
+                  {msg.text}
+                </div>
+              </div>
+            ))}
+            {loading && (
+              <div className="msg-wrap">
+                <div className="msg-avatar aria-av"><Sparkles size={11} strokeWidth={1.5} /></div>
+                <div className="msg-bubble aria-bubble">
+                  <div className="msg-typing">
+                    <div className="typing-dot"></div>
+                    <div className="typing-dot"></div>
+                    <div className="typing-dot"></div>
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={bottomRef} />
+          </div>
+
+          {messages.length <= 1 && (
+            <div className="aria-suggestions">
+              {SUGGESTIONS.map(s => (
+                <button key={s} className="aria-suggest-btn" onClick={() => sendMessage(s)}>
+                  {s}
+                </button>
+              ))}
+            </div>
+          )}
+
+          <div className="aria-input-row">
+            <textarea
+              ref={inputRef}
+              className="aria-input"
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={handleKey}
+              placeholder="Ask ARIA anything..."
+              rows={1}
+            />
+            <button
+              className="aria-send"
+              onClick={() => sendMessage()}
+              disabled={loading || !input.trim()}
+            >
+              ➤
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </>
   )
 }

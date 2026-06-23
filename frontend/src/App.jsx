@@ -9,8 +9,7 @@ import ARIA from './components/ARIA/ARIA'
 import './styles/app.css'
 
 export default function App() {
-  const [activePage, setActivePage]           = useState('signals')
-  const [ariaOpen, setAriaOpen]               = useState(false)
+  const [activePage, setActivePage]             = useState('signals')
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
   useEffect(() => {
@@ -23,7 +22,6 @@ export default function App() {
       <Sidebar
         activePage={activePage}
         onNavigate={setActivePage}
-        onOpenARIA={() => setAriaOpen(true)}
         collapsed={sidebarCollapsed}
         onToggleCollapse={() => setSidebarCollapsed(c => !c)}
       />
@@ -38,7 +36,7 @@ export default function App() {
         </main>
       </div>
 
-      <ARIA open={ariaOpen} onClose={() => setAriaOpen(false)} />
+      <ARIA />
     </div>
   )
 }

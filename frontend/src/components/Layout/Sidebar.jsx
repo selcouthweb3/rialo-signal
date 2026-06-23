@@ -4,7 +4,6 @@ import {
   Coins,
   Network,
   Wallet,
-  Sparkles,
   ChevronLeft,
   ChevronRight,
   Link2,
@@ -18,7 +17,7 @@ const NAV_ITEMS = [
   { id: 'wallet',  label: 'Wallet Analysis',    Icon: Wallet   },
 ]
 
-export default function Sidebar({ activePage, onNavigate, onOpenARIA, collapsed, onToggleCollapse }) {
+export default function Sidebar({ activePage, onNavigate, collapsed, onToggleCollapse }) {
   return (
     <aside className={`sidebar ${collapsed ? 'sidebar--collapsed' : ''}`}>
 
@@ -61,18 +60,6 @@ export default function Sidebar({ activePage, onNavigate, onOpenARIA, collapsed,
           </button>
         ))}
 
-        <div className="sb-divider" />
-
-        {/* ARIA nav entry */}
-        <button
-          className="sb-item sb-item--aria"
-          onClick={onOpenARIA}
-          title={collapsed ? 'ARIA' : undefined}
-          aria-label="Open ARIA"
-        >
-          <span className="sb-item-icon"><Sparkles size={16} strokeWidth={1.8} /></span>
-          {!collapsed && <span className="sb-item-label">ARIA</span>}
-        </button>
       </nav>
 
       {/* Footer */}

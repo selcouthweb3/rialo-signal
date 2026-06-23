@@ -159,17 +159,6 @@
   text-overflow: ellipsis;
 }
 
-/* ── ARIA item special style ─────────────────────────────── */
-.sb-item--aria {
-  color: rgba(167, 139, 250, 0.55);
-}
-
-.sb-item--aria:hover {
-  background: rgba(167, 139, 250, 0.06);
-  border-color: rgba(167, 139, 250, 0.25);
-  color: var(--accent);
-}
-
 /* ── Footer ──────────────────────────────────────────────── */
 .sb-footer {
   padding: 14px 16px;
