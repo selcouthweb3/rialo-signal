@@ -50,7 +50,7 @@ function genEntityNodes() {
     r:       netWorthToRadius(e.netWorth),
     name:    e.label,
     pct:     formatPrice(e.netWorth),
-    holding: e.notes || CATEGORY_LABELS[e.category] || '',
+    holding: e.notes || formatPrice(e.netWorth),
     txCount: null,
     lastMove: 'On-chain',
     _entity: e,
@@ -248,14 +248,24 @@ export default function ClusterMap() {
     nodeSel
       .on('mouseover',(event,d) => {
         tt.style.opacity = '1'
-        tt.innerHTML = `
-          <div class="tt-name" style="color:${d.color}">${d.name}</div>
-          <div class="tt-row"><span>Type</span><span class="tt-val">${d.label}</span></div>
-          <div class="tt-row"><span>Value</span><span class="tt-val">${d.holding}</span></div>
-          <div class="tt-row"><span>Signal</span><span class="tt-val">${d.pct}</span></div>
-          ${d.txCount?`<div class="tt-row"><span>TXs</span><span class="tt-val">${d.txCount.toLocaleString()}</span></div>`:''}
-          <div class="tt-row"><span>Updated</span><span class="tt-val">${d.lastMove}</span></div>
-        `
+        if (d._entity) {
+          tt.innerHTML = `
+            <div class="tt-name" style="color:${d.color}">${d.name}</div>
+            <div class="tt-row"><span>Category</span><span class="tt-val">${d.label}</span></div>
+            <div class="tt-row"><span>Net Worth</span><span class="tt-val">${d.pct}</span></div>
+            <div class="tt-row"><span>Risk</span><span class="tt-val">${d._entity.risk}</span></div>
+            <div class="tt-row"><span>Updated</span><span class="tt-val">${d.lastMove}</span></div>
+          `
+        } else {
+          tt.innerHTML = `
+            <div class="tt-name" style="color:${d.color}">${d.name}</div>
+            <div class="tt-row"><span>Type</span><span class="tt-val">${d.label}</span></div>
+            <div class="tt-row"><span>Value</span><span class="tt-val">${d.holding}</span></div>
+            <div class="tt-row"><span>Signal</span><span class="tt-val">${d.pct}</span></div>
+            ${d.txCount?`<div class="tt-row"><span>TXs</span><span class="tt-val">${d.txCount.toLocaleString()}</span></div>`:''}
+            <div class="tt-row"><span>Updated</span><span class="tt-val">${d.lastMove}</span></div>
+          `
+        }
       })
       .on('mousemove', event => {
         const rect = svgEl.parentElement.getBoundingClientRect()
