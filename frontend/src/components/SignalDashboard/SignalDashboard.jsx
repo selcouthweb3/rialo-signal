@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Route } from 'lucide-react'
 import { usePrices } from '../../hooks/usePrices'
 import { useSignals } from '../../hooks/useSignals'
 import { useStaking } from '../../hooks/useStaking'
@@ -7,7 +6,6 @@ import { useWallet } from '../../context/WalletContext'
 import { formatPrice, formatChange, changeClass, signalColor, signalClass, riskColor } from '../../utils/format'
 import PipelineFlow from './PipelineFlow'
 import StakingModal from '../Wallet/StakingModal'
-import RoadmapModal from './RoadmapModal'
 import './SignalDashboard.css'
 
 const SIGNAL_LABELS = {
@@ -34,7 +32,6 @@ export default function SignalDashboard() {
   const [txLog, setTxLog] = useState(INITIAL_TX_LOG)
   const txCountRef = useRef(3)
   const [stakingOpen, setStakingOpen]   = useState(false)
-  const [roadmapOpen, setRoadmapOpen]   = useState(false)
 
   useEffect(() => {
     if (!signalData?.signals) return
@@ -116,14 +113,6 @@ export default function SignalDashboard() {
       </div>
 
       <PipelineFlow />
-
-      {/* ── Roadmap button ────────────────────────────────────── */}
-      <div className="sd-roadmap-row">
-        <button className="sd-roadmap-btn" onClick={() => setRoadmapOpen(true)}>
-          <Route size={13} strokeWidth={1.8} />
-          View Roadmap
-        </button>
-      </div>
 
       {/* ── Signal Tier card ─────────────────────────────────── */}
       {isConnected && (
@@ -289,7 +278,6 @@ export default function SignalDashboard() {
         </div>
       </div>
       <StakingModal open={stakingOpen} onClose={() => setStakingOpen(false)} />
-      <RoadmapModal open={roadmapOpen} onClose={() => setRoadmapOpen(false)} />
     </div>
   )
 }

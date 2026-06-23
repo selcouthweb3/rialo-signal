@@ -5,6 +5,7 @@ import {
   Network,
   Wallet,
   BookMarked,
+  Route,
   ChevronLeft,
   ChevronRight,
   Link2,
@@ -19,7 +20,7 @@ const NAV_ITEMS = [
   { id: 'watchlist', label: 'Watchlist',          Icon: BookMarked },
 ]
 
-export default function Sidebar({ activePage, onNavigate, collapsed, onToggleCollapse }) {
+export default function Sidebar({ activePage, onNavigate, collapsed, onToggleCollapse, onOpenRoadmap }) {
   return (
     <aside className={`sidebar ${collapsed ? 'sidebar--collapsed' : ''}`}>
 
@@ -63,6 +64,19 @@ export default function Sidebar({ activePage, onNavigate, collapsed, onToggleCol
         ))}
 
       </nav>
+
+      {/* Roadmap button */}
+      <div className="sb-roadmap-area">
+        <button
+          className="sb-roadmap-btn"
+          onClick={onOpenRoadmap}
+          title={collapsed ? 'Roadmap' : undefined}
+          aria-label="View roadmap"
+        >
+          <Route size={14} strokeWidth={1.8} />
+          {!collapsed && <span>Roadmap</span>}
+        </button>
+      </div>
 
       {/* Footer */}
       <div className="sb-footer">

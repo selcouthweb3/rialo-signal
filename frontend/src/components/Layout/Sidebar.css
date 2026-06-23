@@ -176,6 +176,38 @@
   overflow: hidden;
 }
 
+/* ── Roadmap button ──────────────────────────────────────── */
+.sb-roadmap-area {
+  padding: 0 10px 10px;
+  flex-shrink: 0;
+}
+
+.sb-roadmap-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 7px;
+  border: 0.5px solid rgba(34, 211, 238, 0.25);
+  background: rgba(34, 211, 238, 0.04);
+  color: rgba(34, 211, 238, 0.65);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: background 150ms, border-color 150ms, color 150ms;
+}
+
+.sb-roadmap-btn:hover {
+  background: rgba(34, 211, 238, 0.08);
+  border-color: rgba(34, 211, 238, 0.5);
+  color: var(--accent2);
+}
+
 /* ── Mobile: hide sidebar, could add hamburger later ─────── */
 @media (max-width: 768px) {
   .sidebar {

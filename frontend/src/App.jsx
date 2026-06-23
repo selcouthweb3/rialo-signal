@@ -7,6 +7,7 @@ import ClusterMap from './components/ClusterMap/ClusterMap'
 import WalletAnalysis from './components/WalletAnalysis/WalletAnalysis'
 import Watchlist from './components/Watchlist/Watchlist'
 import ARIA from './components/ARIA/ARIA'
+import RoadmapModal from './components/SignalDashboard/RoadmapModal'
 import { useWallet } from './context/WalletContext'
 import './styles/app.css'
 
@@ -25,6 +26,7 @@ export default function App() {
   const [activePage, setActivePage]             = useState('signals')
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [walletInitAddr, setWalletInitAddr]     = useState(null)
+  const [roadmapOpen, setRoadmapOpen]           = useState(false)
 
   function goToWalletAnalysis(address) {
     setWalletInitAddr(address)
@@ -43,6 +45,7 @@ export default function App() {
         onNavigate={setActivePage}
         collapsed={sidebarCollapsed}
         onToggleCollapse={() => setSidebarCollapsed(c => !c)}
+        onOpenRoadmap={() => setRoadmapOpen(true)}
       />
 
       <div className={`app-body${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
@@ -65,6 +68,7 @@ export default function App() {
 
       <ARIA />
       <ChainToast />
+      <RoadmapModal open={roadmapOpen} onClose={() => setRoadmapOpen(false)} />
     </div>
   )
 }

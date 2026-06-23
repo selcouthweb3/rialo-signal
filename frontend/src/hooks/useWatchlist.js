@@ -30,12 +30,15 @@ export function useWatchlist() {
       setWatchlist([])
       return
     }
+    console.log('[useWatchlist] fetching from contract:', CONTRACT_ADDRESS, 'for', address)
     try {
-      const c    = await getContract(false)
+      // Must use signer so eth_call includes from:address → msg.sender is set correctly
+      const c    = await getContract(true)
       const list = await c.getWatchlist()
+      console.log('[useWatchlist] got', list.length, 'entries:', list)
       setWatchlist(list.map(a => a.toLowerCase()))
-    } catch {
-      // Not deployed yet — keep empty
+    } catch (err) {
+      console.warn('[useWatchlist] refreshWatchlist error:', err.message)
       setWatchlist([])
     }
   }, [address, isConnected])
