@@ -1,66 +1,34 @@
 import React from 'react'
+import { usePrices } from '../../hooks/usePrices'
 import './Topbar.css'
 
-/*
-  TOPBAR COMPONENT
-  =================
-  The fixed navigation bar at the top of the app.
-  
-  Props:
-    - tabs: array of { id, label, desc }
-    - activeTab: string — which tab is currently selected
-    - onTabChange: function — called when user clicks a tab
-  
-  This component is "dumb" — it only displays what it's given.
-  It has no state of its own. This is called a "presentational component."
-*/
+const PAGE_TITLES = {
+  signals: 'Signal Engine',
+  tokens:  'Token Intelligence',
+  cluster: 'Cluster Map',
+  wallet:  'Wallet Analysis',
+}
 
-export default function Topbar({ tabs, activeTab, onTabChange }) {
+export default function Topbar({ activePage }) {
+  const { prices, loading } = usePrices(60000)
+  const ethPrice = prices?.crypto?.ETH?.price
+
   return (
-    <header className="topbar">
-      <div className="topbar-inner">
-
-        {/* Brand / Logo */}
-        <div className="topbar-brand">
-          <span className="brand-name">
-            Rialo <span className="brand-accent">Signal</span>
+    <header className="app-header">
+      <h1 className="app-header-title">{PAGE_TITLES[activePage] || activePage}</h1>
+      <div className="app-header-right">
+        {!loading && ethPrice && (
+          <span className="pill pill-sdk app-header-price">
+            ETH&nbsp;
+            <span className="app-header-price-val">
+              ${ethPrice.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+            </span>
           </span>
-          <span className="brand-sub">Onchain Intelligence Terminal</span>
-        </div>
-
-        {/* Tab navigation */}
-        <nav className="topbar-nav">
-          {/*
-            tabs.map() loops over the TABS array from App.jsx
-            and creates a button for each one.
-            
-            The "key" prop is required by React when rendering lists.
-            It helps React track which items changed.
-          */}
-          {tabs.map(tab => (
-            <button
-              key={tab.id}
-              className={`nav-tab ${activeTab === tab.id ? 'active' : ''}`}
-              onClick={() => onTabChange(tab.id)}
-              title={tab.desc}   /* Tooltip on hover */
-            >
-              {tab.label}
-            </button>
-          ))}
-        </nav>
-
-        {/* Status indicators */}
-        <div className="topbar-status">
-          <span className="pill pill-live pill-fade-in">
-            <span className="dot-pulse"></span>
-            Live
-          </span>
-          <span className="pill pill-sdk pill-fade-in" style={{animationDelay:'0.3s'}}>
-            <span className="dot-pulse" style={{ animationDuration: '2.5s' }}></span>
-            SDK Ready
-          </span>
-        </div>
-
+        )}
+        <span className="app-header-status">
+          <span className="app-header-dot" />
+          API Live
+        </span>
       </div>
     </header>
   )

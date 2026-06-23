@@ -32,6 +32,7 @@
   /* Typography */
   --font-display: 'Syne Variable', 'Syne', sans-serif;
   --font-mono:    'DM Mono', monospace;
+  --font-body:    'DM Mono', monospace;
 
   /* Spacing */
   --space-xs: 4px;
@@ -74,6 +75,7 @@ a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 button { transition: all 180ms ease; }
+button:active { transform: scale(0.98); }
 
 /* ── Semantic color utilities ────────────────────────────── */
 .up      { color: var(--accent); }
@@ -86,10 +88,10 @@ button { transition: all 180ms ease; }
 
 /* ── Shared card title ───────────────────────────────────── */
 .card-title {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   margin-bottom: 12px;
   display: flex;
   align-items: center;
@@ -99,7 +101,7 @@ button { transition: all 180ms ease; }
 /* ── Shared metric display ───────────────────────────────── */
 .metric-value {
   font-family: var(--font-display);
-  font-size: 22px;
+  font-size: 28px;
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1.1;
@@ -197,21 +199,71 @@ button { transition: all 180ms ease; }
   background: var(--border);
 }
 
+/* ── Table row hover (5.5) ───────────────────────────────── */
+tbody tr:hover td {
+  background: rgba(34, 211, 238, 0.03);
+}
+
+/* ── Value flash animation (5.8) ─────────────────────────── */
+@keyframes value-flash {
+  0%   { color: var(--accent2); }
+  100% { color: inherit; }
+}
+.flash-value { animation: value-flash 600ms ease-out; }
+
+/* ── Skeleton loader (5.8) ───────────────────────────────── */
+@keyframes skeleton-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+.skeleton-pulse {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.04) 25%,
+    rgba(255,255,255,0.10) 50%,
+    rgba(255,255,255,0.04) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
 /* ── Layout shell ────────────────────────────────────────── */
 .app-shell {
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   background: var(--bg-base);
+}
+
+/* Content area pushed right of sidebar */
+.app-body {
+  flex: 1;
+  min-width: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin-left: 220px;
+  transition: margin-left 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.app-body.sidebar-collapsed {
+  margin-left: 64px;
 }
 
 .app-main {
   flex: 1;
   width: 100%;
   min-width: 0;
-  padding: 20px 32px 40px;
+  max-width: 1200px;
+  padding: 24px 32px 40px;
+}
+
+@media (max-width: 768px) {
+  .app-body { margin-left: 64px; }
+  .app-body.sidebar-collapsed { margin-left: 64px; }
 }
 
 @media (max-width: 640px) {
-  .app-main { padding: 12px 16px 32px; }
+  .app-main { padding: 16px 16px 32px; }
 }

@@ -61,9 +61,9 @@
   flex-direction: column;
   align-items: center;
 }
-.wa-empty-icon-svg { color: rgba(167,139,250,0.2); margin-bottom: 16px; }
-.wa-empty-title    { font-size: 13px; margin-bottom: 6px; color: rgba(255,255,255,0.5); }
-.wa-empty-sub      { font-size: 11px; color: rgba(255,255,255,0.25); }
+.wa-empty-icon-svg { color: rgba(34, 211, 238, 0.3); margin-bottom: 16px; width: 48px; height: 48px; }
+.wa-empty-title    { font-size: 16px; font-weight: 600; margin-bottom: 6px; color: rgba(255,255,255,0.6); }
+.wa-empty-sub      { font-size: 13px; color: rgba(255,255,255,0.28); }
 .wa-empty-examples {
   display: flex;
   gap: 8px;
@@ -180,7 +180,7 @@
   background-image: linear-gradient(135deg, transparent 0%, rgba(167,139,250,0.03) 100%);
   transition: border-color 200ms ease;
 }
-.wa-card:hover { border-color: rgba(167,139,250,0.2); }
+.wa-card:hover { border-color: rgba(34, 211, 238, 0.3); }
 
 /* ── Holdings ────────────────────────────────────────────── */
 .holding-row {
@@ -347,7 +347,9 @@
   border-radius: var(--radius-md);
   padding: 16px 20px;
   background-image: linear-gradient(135deg, transparent 0%, rgba(167,139,250,0.03) 100%);
+  transition: border-color 150ms ease;
 }
+.wa-metric-card:hover { border-color: rgba(34, 211, 238, 0.3); }
 .wa-metric-unit { font-size: 13px; font-weight: 400; color: var(--text-muted); }
 
 /* ── v2: Shared table ────────────────────────────────────── */
@@ -407,7 +409,8 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.wa-tx-failed td { background: rgba(248, 113, 113, 0.04); }
+.wa-tx-failed td:first-child { border-left: 2px solid rgba(248, 113, 113, 0.6); padding-left: 6px; }
+.wa-tx-failed td { background: rgba(248, 113, 113, 0.03); }
 .wa-tx-failed .wa-tx-hash { color: var(--danger); }
 
 /* ── v2: Empty row ───────────────────────────────────────── */
