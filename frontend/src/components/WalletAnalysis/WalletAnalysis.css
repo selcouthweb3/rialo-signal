@@ -1,5 +1,38 @@
 /* ── Search ──────────────────────────────────────────────── */
-.wa-search { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.wa-search { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+
+/* ── Analyse My Wallet button ────────────────────────────── */
+.wa-my-wallet-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  margin-bottom: 18px;
+  border-radius: 8px;
+  border: 0.5px solid rgba(34, 211, 238, 0.4);
+  background: rgba(34, 211, 238, 0.06);
+  color: var(--accent2);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 150ms, border-color 150ms;
+}
+
+.wa-my-wallet-btn:hover {
+  background: rgba(34, 211, 238, 0.12);
+  border-color: rgba(34, 211, 238, 0.65);
+}
+
+.wa-my-wallet-btn:disabled { opacity: 0.5; cursor: wait; }
+
+.wa-my-wallet-addr {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(34, 211, 238, 0.65);
+  background: rgba(34, 211, 238, 0.08);
+  padding: 2px 7px;
+  border-radius: 4px;
+}
 .wa-input {
   flex: 1;
   min-width: 260px;

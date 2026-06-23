@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { Search, Copy, ExternalLink } from 'lucide-react'
+import { Search, Copy, ExternalLink, Wallet } from 'lucide-react'
 import { useWalletV2 } from '../../hooks/useWalletV2'
+import { useWallet } from '../../context/WalletContext'
 import { formatPrice, shortAddress } from '../../utils/format'
 import './WalletAnalysis.css'
 
@@ -39,6 +40,7 @@ function copyToClipboard(text) {
 export default function WalletAnalysis() {
   const [inputVal, setInputVal] = useState('')
   const { data, loading, error, retrying, fetch } = useWalletV2()
+  const { address: connectedAddress, isConnected } = useWallet()
 
   function handleSubmit() {
     const addr = inputVal.trim()
@@ -48,6 +50,12 @@ export default function WalletAnalysis() {
   function handleSample(address) {
     setInputVal(address)
     fetch(address)
+  }
+
+  function handleAnalyseMyWallet() {
+    if (!connectedAddress) return
+    setInputVal(connectedAddress)
+    fetch(connectedAddress)
   }
 
   const entityColor = data?.entity_category
@@ -69,6 +77,19 @@ export default function WalletAnalysis() {
           {loading ? 'Analyzing…' : 'Analyze ↗'}
         </button>
       </div>
+
+      {/* ── Analyse My Wallet (connected) ──────────────────── */}
+      {isConnected && (
+        <button
+          className="wa-my-wallet-btn"
+          onClick={handleAnalyseMyWallet}
+          disabled={loading}
+        >
+          <Wallet size={13} strokeWidth={1.8} />
+          Analyse My Wallet
+          <span className="wa-my-wallet-addr">{connectedAddress.slice(0, 6)}…{connectedAddress.slice(-4)}</span>
+        </button>
+      )}
 
       {/* ── Error ──────────────────────────────────────────── */}
       {error && (

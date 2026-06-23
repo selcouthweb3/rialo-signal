@@ -199,6 +199,45 @@ button:active { transform: scale(0.98); }
   background: var(--border);
 }
 
+/* ── Chain-change toast ──────────────────────────────────── */
+.chain-toast {
+  position: fixed;
+  bottom: 28px;
+  left: 240px;              /* clear the sidebar */
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: var(--bg-card);
+  border: 0.5px solid rgba(251, 191, 36, 0.4);
+  border-radius: var(--radius-md);
+  color: var(--warn);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  z-index: 500;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  animation: toast-in 200ms ease;
+  max-width: 420px;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.chain-toast-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  padding: 0 2px;
+  flex-shrink: 0;
+}
+
+.chain-toast-close:hover { color: var(--text-primary); }
+
 /* ── Table row hover (5.5) ───────────────────────────────── */
 tbody tr:hover td {
   background: rgba(34, 211, 238, 0.03);

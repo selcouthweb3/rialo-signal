@@ -6,7 +6,19 @@ import TokenIntel from './components/TokenIntel/TokenIntel'
 import ClusterMap from './components/ClusterMap/ClusterMap'
 import WalletAnalysis from './components/WalletAnalysis/WalletAnalysis'
 import ARIA from './components/ARIA/ARIA'
+import { useWallet } from './context/WalletContext'
 import './styles/app.css'
+
+function ChainToast() {
+  const { toast, dismissToast } = useWallet()
+  if (!toast) return null
+  return (
+    <div className="chain-toast">
+      <span>⚠ {toast}</span>
+      <button className="chain-toast-close" onClick={dismissToast} aria-label="Dismiss">×</button>
+    </div>
+  )
+}
 
 export default function App() {
   const [activePage, setActivePage]             = useState('signals')
@@ -37,6 +49,7 @@ export default function App() {
       </div>
 
       <ARIA />
+      <ChainToast />
     </div>
   )
 }
