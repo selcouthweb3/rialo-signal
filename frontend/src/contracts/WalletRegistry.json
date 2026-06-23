@@ -1,0 +1,39 @@
+[
+  {
+    "type": "function",
+    "name": "addWallet",
+    "stateMutability": "nonpayable",
+    "inputs": [{ "name": "wallet", "type": "address" }],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "removeWallet",
+    "stateMutability": "nonpayable",
+    "inputs": [{ "name": "wallet", "type": "address" }],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "getWatchlist",
+    "stateMutability": "view",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "address[]" }]
+  },
+  {
+    "type": "event",
+    "name": "WalletAdded",
+    "inputs": [
+      { "name": "user",    "indexed": true, "type": "address" },
+      { "name": "watched", "indexed": true, "type": "address" }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "WalletRemoved",
+    "inputs": [
+      { "name": "user",    "indexed": true, "type": "address" },
+      { "name": "watched", "indexed": true, "type": "address" }
+    ]
+  }
+]

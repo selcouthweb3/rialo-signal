@@ -1,0 +1,53 @@
+[
+  {
+    "type": "function",
+    "name": "stake",
+    "stateMutability": "payable",
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "unstake",
+    "stateMutability": "nonpayable",
+    "inputs": [],
+    "outputs": []
+  },
+  {
+    "type": "function",
+    "name": "getStake",
+    "stateMutability": "view",
+    "inputs": [{ "name": "user", "type": "address" }],
+    "outputs": [{ "name": "", "type": "uint256" }]
+  },
+  {
+    "type": "function",
+    "name": "stakes",
+    "stateMutability": "view",
+    "inputs": [{ "name": "", "type": "address" }],
+    "outputs": [{ "name": "", "type": "uint256" }]
+  },
+  {
+    "type": "function",
+    "name": "MIN_STAKE",
+    "stateMutability": "view",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256" }]
+  },
+  {
+    "type": "event",
+    "name": "Staked",
+    "inputs": [
+      { "name": "user",   "indexed": true,  "type": "address" },
+      { "name": "amount", "indexed": false, "type": "uint256" }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "Unstaked",
+    "inputs": [
+      { "name": "user",   "indexed": true,  "type": "address" },
+      { "name": "amount", "indexed": false, "type": "uint256" }
+    ]
+  }
+]
