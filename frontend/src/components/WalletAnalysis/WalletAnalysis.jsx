@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Search, Copy, ExternalLink, Wallet, Eye, EyeOff } from 'lucide-react'
+import { Search, Copy, ExternalLink, Wallet, Eye, EyeOff, RefreshCw } from 'lucide-react'
 import { useWalletV2 } from '../../hooks/useWalletV2'
 import { useWallet } from '../../context/WalletContext'
 import { useWatchlist } from '../../hooks/useWatchlist'
@@ -40,7 +40,7 @@ function copyToClipboard(text) {
 
 export default function WalletAnalysis({ initialAddress = null, onInitConsumed }) {
   const [inputVal, setInputVal] = useState('')
-  const { data, loading, error, retrying, fetch } = useWalletV2()
+  const { data, loading, error, retrying, isRetryable, fetch } = useWalletV2()
   const { address: connectedAddress, isConnected } = useWallet()
   const { isWatching, addWallet, removeWallet, loading: watchLoading, toast: watchToast, contractReady } = useWatchlist()
 
@@ -114,8 +114,21 @@ export default function WalletAnalysis({ initialAddress = null, onInitConsumed }
       )}
 
       {/* ── Error ──────────────────────────────────────────── */}
-      {error && (
+      {error && !isRetryable && (
         <div className="sdk-note sdk-note-error" style={{ marginBottom: '14px' }}>{error}</div>
+      )}
+      {error && isRetryable && (
+        <div className="wa-retry-block">
+          <span className="wa-retry-msg">{error}</span>
+          <button
+            className="wa-retry-btn"
+            onClick={() => fetch(inputVal.trim())}
+            disabled={loading}
+          >
+            <RefreshCw size={12} strokeWidth={2} />
+            Retry
+          </button>
+        </div>
       )}
 
       {/* ── Empty state ────────────────────────────────────── */}
@@ -144,7 +157,7 @@ export default function WalletAnalysis({ initialAddress = null, onInitConsumed }
         <div>
           {retrying && (
             <div className="wa-retry-notice">
-              Backend warming up — this can take 30s on cold start. Retrying…
+              Waking up backend…
             </div>
           )}
           <div className="wa-skeleton-profile">

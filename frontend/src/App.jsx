@@ -9,6 +9,7 @@ import Watchlist from './components/Watchlist/Watchlist'
 import ARIA from './components/ARIA/ARIA'
 import RoadmapModal from './components/SignalDashboard/RoadmapModal'
 import { useWallet } from './context/WalletContext'
+import { startKeepAlive } from './utils/keepAlive'
 import './styles/app.css'
 
 function ChainToast() {
@@ -36,6 +37,11 @@ export default function App() {
   useEffect(() => {
     const apiBase = import.meta.env.VITE_API_URL || '/api'
     fetch(`${apiBase}/prices/all`).catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    const id = startKeepAlive()
+    return () => clearInterval(id)
   }, [])
 
   return (
